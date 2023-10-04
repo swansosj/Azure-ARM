@@ -529,7 +529,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('gatewayPipId')]",
-                "[variables('hubSubnet1Id')]"
+                "[variables('hubGwSubnet1Id')]"
             ],
             "properties": {
                 "ipConfigurations": [
