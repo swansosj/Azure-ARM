@@ -278,6 +278,20 @@
             "metadata": {
                 "description": "description"
             }
+        },
+        "pipZones": {
+            "type": "string",
+            "defaultValue": "Zone-Redundant",
+            "allowedValues": [
+                "No-Zone",
+                "Zone-Redundant",
+                "1",
+                "2",
+                "3"
+            ],
+            "metadata": {
+                "description": "description"
+            }
         }
     },
     "functions": [],
@@ -546,8 +560,16 @@
             "name": "[variables('gatewayPipName')]",
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": "[parameters('pipZones')]",
             "properties": {
-                "publicIPAllocationMethod": "Static"
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[concat(toLower(parameters('customerName')), '-', uniquestring(resourceGroup().id))]"
+                }
             }
         },
         {
