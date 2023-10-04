@@ -221,7 +221,11 @@
         "hubPeer1Array": "[split(variables('hubVnetName'),'-')]",
         "hubPeerArrayType": "[string(variables('hubPeer1Array')[2])]",
         "spoke1PeerArray": "[split(variables('spoke1VnetName'),'-')]",
-        "spoke1PeerArrayType": "[string(variables('spoke1PeerArray')[2])]"
+        "spoke1PeerArrayType": "[string(variables('spoke1PeerArray')[2])]",
+        "spoke2PeerArray": "[split(variables('spoke2VnetName'),'-')]",
+        "spoke2PeerArrayType": "[string(variables('spoke2PeerArray')[2])]",
+        "spoke3PeerArray": "[split(variables('spoke3VnetName'),'-')]",
+        "spoke3PeerArrayType": "[string(variables('spoke3PeerArray')[2])]"
         
     },
     "resources": [
@@ -353,6 +357,120 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('hubVnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke1PeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('spoke1VnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('spoke1VnetName'), '/peering_', variables('spoke1PeerArrayType'), '_', variables('hubPeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('hubVnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke2PeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke2VnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('spoke2VnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('spoke2VnetName'), '/peering_', variables('spoke2PeerArrayType'), '_', variables('hubPeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke2VnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('hubVnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke3PeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke3VnetName'))]"
+            ],
+            "properties": {
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": false,
+                "remoteVirtualNetwork": {
+                "id": "[variables('spoke3VnetId')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2019-11-01",
+            "name": "[concat(variables('spoke3VnetName'), '/peering_', variables('spoke3PeerArrayType'), '_', variables('hubPeerArrayType'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke3VnetName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]"
             ],
             "properties": {
