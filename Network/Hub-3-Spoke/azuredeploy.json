@@ -1,0 +1,378 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Customer"
+            }
+        },
+        "hubVnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "Hub VNET New or Existing"
+            }
+        },
+        "hubVnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Hub VNET. If new leave blank"
+            }
+        },
+        "hubVnetResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Hub VNET. If new leave blank"
+            }
+        },
+        "hubVnetAddressSpace": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "Subnet of New Hub Vnet"
+            }
+        },
+        "gatewaySubnetAddressSpace": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "Address Space of Gateway Subnet"
+            }
+        },
+        "hubSubnet1Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Hub Subnet"
+            }
+        },
+        "hubSubnet1AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.0.2.0/24",
+            "metadata": {
+                "description": "Hub Subnet 1 Address Space"
+            }
+        },
+        "spoke1VnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "Spoke VNET New or Existing"
+            }
+        },
+        "spoke1VnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of First Spoke VNET"
+            }
+        },
+        "spoke1ResouceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Existing Spoke Resource group"
+            }
+        },
+        "spoke1AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/16",
+            "metadata": {
+                "description": "Spoke 1 Address Space"
+            }
+        },
+        "spoke1Subnet1Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Spoke 1 Subnet 1"
+            }
+        },
+        "spoke1Subnet1AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.1.0.0/24",
+            "metadata": {
+                "description": "Spoke 1 Subnet 1 Address Space"
+            }
+        },
+        "spoke2VnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "Spoke 2 VNET New or Existing"
+            }
+        },
+        "spoke2VnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Second Spoke VNET"
+            }
+        },
+        "spoke2ResouceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Existing Spoke Resource group"
+            }
+        },
+        "spoke2AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/16",
+            "metadata": {
+                "description": "Spoke 2 Address Space"
+            }
+        },
+        "spoke2Subnet1Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Spoke 2 Subnet 1"
+            }
+        },
+        "spoke2Subnet1AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.2.0.0/24",
+            "metadata": {
+                "description": "Spoke 2 Subnet 1 Address Space"
+            }
+        },
+        "spoke3VnetNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "Spoke 3 VNET New or Existing"
+            }
+        },
+        "spoke3VnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Spoke 3 VNET"
+            }
+        },
+        "spoke3ResouceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Existing Spoke 3 Resource group"
+            }
+        },
+        "spoke3AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.3.0.0/16",
+            "metadata": {
+                "description": "Spoke 3 Address Space"
+            }
+        },
+        "spoke3Subnet1Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Spoke 3 Subnet 1"
+            }
+        },
+        "spoke3Subnet1AddressSpace": {
+            "type": "string",
+            "defaultValue": "10.3.0.0/24",
+            "metadata": {
+                "description": "Spoke 3 Subnet 1 Address Space"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "hubVnetName": "[if(equals(parameters('hubVnetNewOrExisting'), 'new'), concat(parameters('customerName'), '-vnet-transit-prod-', resourceGroup().location, '-000'), parameters('hubVnetName'))]",
+        "hubVnetId": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('hubVnetName')))]",
+        "hubSubnet1Name": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),concat(parameters('customerName'),'-snet-transit-prod-', resourceGroup().location, '-000'),parameters('hubSubnet1Name'))]",
+        "hubSubnet1Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),variables('hubSubnet1Name')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),parameters('hubSubnet1Name')))]",
+        "spoke1VnetName": "[if(equals(parameters('spoke1VnetNewOrExisting'), 'new'), concat(parameters('customerName'), '-vnet-servers-prod-', resourceGroup().location, '-000'), parameters('spoke1VnetName'))]",
+        "spoke1VnetId": "[if(equals(parameters('spoke1VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName')),resourceId(parameters('spoke1ResouceGroup'),'Microsoft.Network/virtualNetworks', parameters('spoke1VnetName')))]",
+        "spoke1Subnet1Name": "[if(equals(parameters('spoke1Subnet1Name'),'new'),concat(parameters('customerName'),'-snet-servers-prod-', resourceGroup().location, '-000'),parameters('spoke1Subnet1Name'))]",
+        "spoke1Subnet1Id": "[if(equals(parameters('spoke1VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('spoke1VnetName'),variables('spoke1Subnet1Name')),resourceId(parameters('spoke1ResouceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('spoke1VnetName'),parameters('spoke1Subnet1Name')))]",
+        "spoke2VnetName": "[if(equals(parameters('spoke2VnetNewOrExisting'), 'new'), concat(parameters('customerName'), '-vnet-storage-prod-', resourceGroup().location, '-000'), parameters('spoke2VnetName'))]",
+        "spoke2VnetId": "[if(equals(parameters('spoke2VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('spoke2VnetName')),resourceId(parameters('spoke2ResouceGroup'),'Microsoft.Network/virtualNetworks', parameters('spoke2VnetName')))]",
+        "spoke2Subnet1Name": "[if(equals(parameters('spoke2Subnet1Name'),'new'),concat(parameters('customerName'),'-snet-servers-prod-', resourceGroup().location, '-000'),parameters('spoke2Subnet1Name'))]",
+        "spoke2Subnet1Id": "[if(equals(parameters('spoke2VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('spoke2VnetName'),variables('spoke2Subnet1Name')),resourceId(parameters('spoke2ResouceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('spoke2VnetName'),parameters('spoke2Subnet1Name')))]",
+        "spoke3VnetName": "[if(equals(parameters('spoke3VnetNewOrExisting'), 'new'), concat(parameters('customerName'), '-vnet-identity-prod-', resourceGroup().location, '-000'), parameters('spoke3VnetName'))]",
+        "spoke3VnetId": "[if(equals(parameters('spoke3VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('spoke3VnetName')),resourceId(parameters('spoke3ResouceGroup'),'Microsoft.Network/virtualNetworks', parameters('spoke3VnetName')))]",
+        "spoke3Subnet1Name": "[if(equals(parameters('spoke3Subnet1Name'),'new'),concat(parameters('customerName'),'-snet-servers-prod-', resourceGroup().location, '-000'),parameters('spoke3Subnet1Name'))]",
+        "spoke3Subnet1Id": "[if(equals(parameters('spoke3VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('spoke3VnetName'),variables('spoke3Subnet1Name')),resourceId(parameters('spoke3ResouceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('spoke3VnetName'),parameters('spoke3Subnet1Name')))]",
+        "hubPeer1Array": "[split(variables('hubVnetName'),'-')]",
+        "hubPeerArrayType": "[string(variables('hubPeer1Array')[2])]",
+        "spoke1PeerArray": "[split(variables('hubVnetName'),'-')]",
+        "spoke1PeerArrayType": "[string(variables('hubPeer1Array')[2])]"
+        
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('hubVnetName')]",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "virtualNetwork1"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubVnetAddressSpace')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('gatewaySubnetAddressSpace')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('hubSubnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hubSubnet1AddressSpace')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('spoke1VnetName')]",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "virtualNetwork1"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke1AddressSpace')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('spoke1Subnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('spoke1Subnet1AddressSpace')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('spoke2VnetName')]",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "virtualNetwork1"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke2AddressSpace')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('spoke2Subnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('spoke2Subnet1AddressSpace')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[variables('spoke3VnetName')]",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "virtualNetwork1"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke3AddressSpace')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('spoke3Subnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('spoke3Subnet1AddressSpace')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('hubVnetName'), '/', variables('hubPeerArrayType'),'-to-', variables('spoke1PeerArrayType'))]",
+            "dependsOn": [
+                "[variables('hubVnetId')]",
+                "[variables('spoke1VnetId')]"
+            ],
+            "properties": {
+                "remoteVirtualNetwork": {
+                    "id": "[variables('spoke1VnetId')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "doNotVerifyRemoteGateways": false,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke1AddressSpace')]"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke1AddressSpace')]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('spoke1VnetName'), '/', variables('spoke1PeerArrayType'),'-to-', variables('hubPeerArrayType'))]",
+            "dependsOn": [
+                "[variables('hubVnetId')]",
+                "[variables('spoke1VnetId')]"
+            ],
+            "properties": {
+                "remoteVirtualNetwork": {
+                    "id": "[variables('hubVnetId')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": true,
+                "doNotVerifyRemoteGateways": false,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubVnetAddressSpace')]"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubVnetAddressSpace')]"
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
