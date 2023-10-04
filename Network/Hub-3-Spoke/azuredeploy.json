@@ -253,12 +253,10 @@
             "type": "string",
             "defaultValue": "VpnGw1",
             "allowedValues": [
-                "VpnGw1",
                 "VpnGw2",
                 "VpnGw3",
                 "VpnGw4",
                 "VpnGw5",
-                "VpnGw1AZ",
                 "VpnGw2AZ",
                 "VpnGw3AZ",
                 "VpnGw4AZ",
@@ -266,17 +264,6 @@
             ],
             "metadata": {
                 "description": "The SKU of the Gateway, if deployed"
-            }
-        },
-        "gatewayGeneration": {
-            "type": "string",
-            "defaultValue": "Generation1",
-            "allowedValues": [
-                "Generation1",
-                "Generation2"
-            ],
-            "metadata": {
-                "description": "description"
             }
         }
     },
@@ -586,7 +573,7 @@
                     "name": "[parameters('gatewaySku')]",
                     "tier": "[parameters('gatewaySku')]"
                 },
-                    "vpnGatewayGeneration": "[parameters('gatewayGeneration')]",
+                    "vpnGatewayGeneration": "Generation2",
                     "gatewayType": "Vpn",
                     "vpnType": "RouteBased",
                     "enableBgp": false
