@@ -15,14 +15,6 @@
                 "description": "Name of the Customer"
             }
         },
-        "appName": {
-            "type": "string",
-            "defaultValue": "nmw-app",
-            "metadata": {
-                "description": "Base name of the resource such as web app name and app service plan"
-            },
-            "minLength": 2
-        },
         "azureTagPrefix": {
             "type": "string",
             "defaultValue": "NMW",
