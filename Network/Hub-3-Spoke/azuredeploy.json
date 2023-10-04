@@ -330,7 +330,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubVnetName'), '_', variables('spoke1VnetName'))]",
+            "name": "[concat(variables('hubPeerArrayType'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke1PeerArrayType'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
@@ -349,7 +349,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[concat(variables('spoke1VnetName'), '/peering_', variables('spoke1VnetName'), '_', variables('hubVnetName'))]",
+            "name": "[concat(variables('spoke1PeerArrayType'), '/peering_', variables('spoke1PeerArrayType'), '_', variables('hubPeerArrayType'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]",
