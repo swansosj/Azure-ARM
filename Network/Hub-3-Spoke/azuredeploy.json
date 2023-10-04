@@ -372,44 +372,6 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke1PeerArrayType'))]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]"
-            ],
-            "properties": {
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": false,
-                "useRemoteGateways": false,
-                "remoteVirtualNetwork": {
-                "id": "[variables('spoke1VnetId')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2019-11-01",
-            "name": "[concat(variables('spoke1VnetName'), '/peering_', variables('spoke1PeerArrayType'), '_', variables('hubPeerArrayType'))]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]"
-            ],
-            "properties": {
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": true,
-                "useRemoteGateways": false,
-                "remoteVirtualNetwork": {
-                "id": "[variables('hubVnetId')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2019-11-01",
             "name": "[concat(variables('hubVnetName'), '/peering_', variables('hubPeerArrayType'), '_', variables('spoke2PeerArrayType'))]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
