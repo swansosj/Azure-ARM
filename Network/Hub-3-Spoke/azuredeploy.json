@@ -361,7 +361,7 @@
                 "allowGatewayTransit": true,
                 "useRemoteGateways": false,
                 "remoteVirtualNetwork": {
-                "id": "[variables('hubVnetName')]"
+                "id": "[variables('hubVnetId')]"
                 }
             }
         }
