@@ -267,6 +267,17 @@
             "metadata": {
                 "description": "The SKU of the Gateway, if deployed"
             }
+        },
+        "gatewayGeneration": {
+            "type": "string",
+            "defaultValue": "Generation1",
+            "allowedValues": [
+                "Generation1",
+                "Generation2"
+            ],
+            "metadata": {
+                "description": "description"
+            }
         }
     },
     "functions": [],
@@ -567,6 +578,7 @@
                     "name": "[parameters('gatewaySku')]",
                     "tier": "[parameters('gatewaySku')]"
                 },
+                    "vpnGatewayGeneration": "[parameters('gatewayGeneration')]",
                     "gatewayType": "Vpn",
                     "vpnType": "RouteBased",
                     "enableBgp": false
