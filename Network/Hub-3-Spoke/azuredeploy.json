@@ -328,7 +328,7 @@
             }
         },
         {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/",
             "apiVersion": "2023-05-01",
             "name": "[concat(parameters('hubVnetName'), '/hub-to-spoke')]",
             "dependsOn": [
@@ -359,7 +359,7 @@
             }
         },
         {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/",
             "apiVersion": "2023-05-01",
             "name": "[concat(parameters('hubVnetName'), '/spoke-to-hub')]",
             "dependsOn": [
