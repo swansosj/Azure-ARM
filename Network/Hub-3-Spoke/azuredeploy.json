@@ -316,8 +316,7 @@
         "peer3name": "[concat(variables('hubVnetName'), '/peering-', variables('hubPeerArrayType'), '-', variables('spoke2PeerArrayType'))]",
         "peer4name": "[concat(variables('spoke2VnetName'), '/peering-', variables('spoke2VnetName'), '-', variables('hubPeerArrayType'))]",
         "peer5name": "[concat(variables('hubVnetName'), '/peering-', variables('hubPeerArrayType'), '-', variables('spoke3PeerArrayType'))]",
-        "peer6name": "[concat(variables('spoke3VnetName'), '/peering-', variables('spoke3VnetName'), '-', variables('hubPeerArrayType'))]",
-        "pipZones": "[pickZones('Microsoft.Network', 'publicIPAddresses', resourceGroup().location, 3)]"
+        "peer6name": "[concat(variables('spoke3VnetName'), '/peering-', variables('spoke3VnetName'), '-', variables('hubPeerArrayType'))]"
         
     },
     "resources": [
@@ -551,7 +550,6 @@
                 "name": "Standard",
                 "tier": "Regional"
             },
-            "zones": "[variables('pipZones')]",
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
