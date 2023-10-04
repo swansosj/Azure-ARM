@@ -330,7 +330,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('hubVnetName'), '/', variables('hubPeerArrayType'), '-to-', variables('spoke1PeerArrayType'))]",
+            "name": "[concat(parameters('hubVnetName'), '/hub-to-spoke')]",
             "dependsOn": [
                 "[variables('hubVnetId')]",
                 "[variables('spoke1VnetId')]"
@@ -361,7 +361,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('hubVnetName'), '/', variables('spoke1PeerArrayType'), '-to-', variables('hubPeerArrayType'))]",
+            "name": "[concat(parameters('hubVnetName'), '/spoke-to-hub')]",
             "dependsOn": [
                 "[variables('hubVnetId')]",
                 "[variables('spoke1VnetId')]"
