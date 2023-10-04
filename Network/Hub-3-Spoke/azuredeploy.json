@@ -291,7 +291,7 @@
         "spoke3PeerArrayType": "[string(variables('spoke3PeerArray')[2])]",
         "gatewayPipName": "[if(equals(parameters('gatewayPipName'),''),concat(parameters('customerName'),'-pip-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayPipName'))]",
         "gatewayPipId": "[if(equals(parameters('gatewayPipNewOrExisting'),'new'),resourceId('Microsoft.Network/publicIPAddresses', variables('gatewayPipName')),resourceId(parameters('gatewayPipRG'),'Microsoft.Network/publicIPAddresses', parameters('gatewayPipName')))]",
-        "gatewayName": "[if(equals(parameters('gatewayNewOrExisting'),''),concat(parameters('customerName'),'-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayName'))]",
+        "gatewayName": "[if(equals(parameters('gatewayName'),''),concat(parameters('customerName'),'-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayName'))]",
         "gatewayId": "[if(equals(parameters('gatewayNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName')),resourceId(parameters('gatewayRG'),'Microsoft.Network/virtualNetworkGateways', parameters('gatewayName')))]"
         
     },
