@@ -301,17 +301,11 @@
         "gatewayName": "[if(equals(parameters('gatewayName'),''),concat(parameters('customerName'),'-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayName'))]",
         "gatewayId": "[if(equals(parameters('gatewayNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName')),resourceId(parameters('gatewayRG'),'Microsoft.Network/virtualNetworkGateways', parameters('gatewayName')))]",
         "peer1name": "[concat(variables('hubVnetName'), '/peering-', variables('hubPeerArrayType'), '-', variables('spoke1PeerArrayType'))]",
-        "peer1Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer1name')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), variables('peer1name')))]",
         "peer2name": "[concat(variables('spoke1VnetName'), '/peering-', variables('spoke1VnetName'), '-', variables('hubPeerArrayType'))]",
-        "peer2Id": "[if(equals(parameters('spoke1VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer2name')),resourceId(parameters('spoke1ResouceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke1VnetName'), variables('peer2name')))]",
         "peer3name": "[concat(variables('hubVnetName'), '/peering-', variables('hubPeerArrayType'), '-', variables('spoke2PeerArrayType'))]",
-        "peer3Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer3name')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), variables('peer3name')))]",
         "peer4name": "[concat(variables('spoke2VnetName'), '/peering-', variables('spoke2VnetName'), '-', variables('hubPeerArrayType'))]",
-        "peer4Id": "[if(equals(parameters('spoke2VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer4name')),resourceId(parameters('spoke2ResouceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke2VnetName'), variables('peer4name')))]",
         "peer5name": "[concat(variables('hubVnetName'), '/peering-', variables('hubPeerArrayType'), '-', variables('spoke3PeerArrayType'))]",
-        "peer5Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer5name')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), variables('peer5name')))]",
-        "peer6name": "[concat(variables('spoke3VnetName'), '/peering-', variables('spoke3VnetName'), '-', variables('hubPeerArrayType'))]",
-        "peer6Id": "[if(equals(parameters('spoke3VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', variables('peer6name')),resourceId(parameters('spoke3ResouceGroup'),'Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke3VnetName'), variables('peer6name')))]"
+        "peer6name": "[concat(variables('spoke3VnetName'), '/peering-', variables('spoke3VnetName'), '-', variables('hubPeerArrayType'))]"
         
     },
     "resources": [
@@ -425,7 +419,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer1Id')]",
+            "name": "[variables('peer1name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
@@ -444,7 +438,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer2Id')]",
+            "name": "[variables('peer2name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName'))]",
@@ -463,7 +457,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer3Id')]",
+            "name": "[variables('peer3name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
@@ -482,7 +476,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer4Id')]",
+            "name": "[variables('peer4name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke2VnetName'))]",
@@ -501,7 +495,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer5Id')]",
+            "name": "[variables('peer5name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName'))]",
@@ -520,7 +514,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
             "apiVersion": "2019-11-01",
-            "name": "[variables('peer6Id')]",
+            "name": "[variables('peer6name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('spoke3VnetName'))]",
