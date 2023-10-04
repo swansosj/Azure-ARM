@@ -281,10 +281,10 @@
         },
         "pipZones": {
             "type": "string",
-            "defaultValue": "Zone-Redundant",
+            "defaultValue": "Zone-redundant",
             "allowedValues": [
                 "No-Zone",
-                "Zone-Redundant",
+                "Zone-redundant",
                 "1",
                 "2",
                 "3"
