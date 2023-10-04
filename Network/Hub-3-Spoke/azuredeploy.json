@@ -256,10 +256,6 @@
                 "virtualNetworkPeerings": [
                     {
                         "name": "hub-to-spoke",
-                        "dependsOn": [
-                            "[variables('hubVnetId')]",
-                            "[variables('spoke1VnetId')]"
-                        ],
                         "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), 'hub-to-spoke')]",
                         "properties": {
                             "remoteVirtualNetwork": {
@@ -311,10 +307,6 @@
                 "virtualNetworkPeerings": [
                     {
                         "name": "spoke-to-hub",
-                        "dependsOn": [
-                            "[variables('hubVnetId')]",
-                            "[variables('spoke1VnetId')]"
-                        ],
                         "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke1VnetName'), 'spoke-to-hub')]",
                         "properties": {
                             "remoteVirtualNetwork": {
