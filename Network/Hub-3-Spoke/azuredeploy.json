@@ -269,6 +269,7 @@
         "hubVnetId": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('hubVnetName')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('hubVnetName')))]",
         "hubSubnet1Name": "[if(equals(parameters('hubVnetName'),''),concat(parameters('customerName'),'-snet-transit-prod-', resourceGroup().location, '-000'),parameters('hubSubnet1Name'))]",
         "hubSubnet1Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),variables('hubSubnet1Name')),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),parameters('hubSubnet1Name')))]",
+        "hubGwSubnet1Id": "[if(equals(parameters('hubVnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),'GatewaySubnet'),resourceId(parameters('hubVnetResourceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('hubVnetName'),'GatewaySubnet'))]",
         "spoke1VnetName": "[if(equals(parameters('spoke1VnetName'), ''), concat(parameters('customerName'), '-vnet-servers-prod-', resourceGroup().location, '-000'), parameters('spoke1VnetName'))]",
         "spoke1VnetId": "[if(equals(parameters('spoke1VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks', variables('spoke1VnetName')),resourceId(parameters('spoke1ResouceGroup'),'Microsoft.Network/virtualNetworks', parameters('spoke1VnetName')))]",
         "spoke1Subnet1Name": "[if(equals(parameters('spoke1VnetName'),''),concat(parameters('customerName'),'-snet-servers-prod-', resourceGroup().location, '-000'),parameters('spoke1Subnet1Name'))]",
@@ -536,7 +537,7 @@
                     "properties": {
                     "privateIPAllocationMethod": "Dynamic",
                     "subnet": {
-                        "id": "[variables('hubSubnet1Id')]"
+                        "id": "[variables('hubGwSubnet1Id')]"
                     },
                     "publicIPAddress": {
                         "id": "[variables('gatewayPipId')]"
