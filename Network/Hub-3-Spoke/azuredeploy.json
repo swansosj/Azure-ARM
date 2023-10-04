@@ -572,6 +572,7 @@
                 "[variables('hubGwSubnet1Id')]"
             ],
             "properties": {
+                "enablePrivateIpAddress": false,
                 "ipConfigurations": [
                 {
                     "properties": {
