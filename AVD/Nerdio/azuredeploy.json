@@ -47,28 +47,6 @@
         "databaseSkuName": {
             "type": "string",
             "defaultValue": "S1"
-        },
-        "automationRoleAssignmentName": {
-            "type": "string",
-            "defaultValue": "[newGuid()]"
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "metadata": {
-                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
-            },
-            "defaultValue": "[deployment().properties.templateLink.uri]"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
-            },
-            "defaultValue": ""
-        },
-        "_securityGuid": {
-            "type": "securestring",
-            "defaultValue": "[newGuid()]"
         }
     },
     "variables": {
@@ -82,16 +60,20 @@
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
         "lawName": "[concat(parameters('customerName'), '-log-nerdio-prod-', resourceGroup().location, '-000')]",
         "logsLawName": "[concat(parameters('customerName'), '-log-nerdio-insights-prod-', resourceGroup().location, '-000')]",
-        "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
-        "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
+        "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, variables('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
+        "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, variables('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
         "microsoftLoginUri": "[environment().authentication.loginEndpoint]",
         "scriptedActionAccountName": "[concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-000')]",
+        "_securityGuid": "[newGuid()]",
+        "_artifactsLocationSasToken": "",
+        "_artifactsLocation": "[deployment().properties.templateLink.uri]",
+        "automationRoleAssignmentName": "[newGuid()]",
         "automation": {
             "runbooks": [
                 {
                     "name": "nmwUpdateRunAs",
-                    "url": "[uri(parameters('_artifactsLocation'), concat('scripts/nmw-update-run-as.ps1', parameters('_artifactsLocationSasToken')))]",
+                    "url": "[uri(variables('_artifactsLocation'), concat('scripts/nmw-update-run-as.ps1', variables('_artifactsLocationSasToken')))]",
                     "version": "1.0.0.0",
                     "type": "PowerShell",
                     "description": "Update using automation Run As account"
@@ -337,7 +319,7 @@
                         "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
                     ],
                     "properties": {
-                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip', parameters('_artifactsLocationSasToken')))]"
+                        "packageUri": "[uri(variables('_artifactsLocation'), concat('web-app/app.zip', variables('_artifactsLocationSasToken')))]"
                     }
                 }
             ]
@@ -460,7 +442,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[parameters('automationRoleAssignmentName')]",
+            "name": "[variables('automationRoleAssignmentName')]",
             "scope": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
