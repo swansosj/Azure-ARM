@@ -259,7 +259,7 @@
                         "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), 'hub-to-spoke')]",
                         "properties": {
                             "remoteVirtualNetwork": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('spoke1VnetName'))]"
+                                "id": "[variables('spoke1VnetId')]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": true,
@@ -310,7 +310,7 @@
                         "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke1VnetName'), 'spoke-to-hub')]",
                         "properties": {
                             "remoteVirtualNetwork": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubVnetName'))]"
+                                "id": "[variables('hubVnetId')]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": true,
