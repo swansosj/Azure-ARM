@@ -11,10 +11,6 @@ ARM Templates for Azure Resources
 
 ### Azure Portal
 
-Standard Custom Template Deployment:
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/)
-
 ## Requirements-and-limitations
 
 ## Configuration
