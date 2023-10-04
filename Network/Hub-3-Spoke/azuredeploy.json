@@ -314,8 +314,8 @@
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": true,
-                            "allowGatewayTransit": true,
-                            "useRemoteGateways": false,
+                            "allowGatewayTransit": false,
+                            "useRemoteGateways": true,
                             "doNotVerifyRemoteGateways": false,
                             "remoteAddressSpace": {
                                 "addressPrefixes": [
