@@ -533,15 +533,13 @@
             "name": "[variables('gatewayPipName')]",
             "apiVersion": "2019-11-01",
             "location": "[resourceGroup().location]",
+            "zones": [],
             "sku": {
                 "name": "Standard",
                 "tier": "Regional"
             },
             "properties": {
-                "publicIPAllocationMethod": "Static",
-                "dnsSettings": {
-                    "domainNameLabel": "[concat(toLower(parameters('customerName')), '-', uniquestring(resourceGroup().id))]"
-                }
+                "publicIPAllocationMethod": "Static"
             }
         },
         {
