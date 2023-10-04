@@ -220,8 +220,8 @@
         "spoke3Subnet1Id": "[if(equals(parameters('spoke3VnetNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworks/subnets', variables('spoke3VnetName'),variables('spoke3Subnet1Name')),resourceId(parameters('spoke3ResouceGroup'),'Microsoft.Network/virtualNetworks/subnets', variables('spoke3VnetName'),parameters('spoke3Subnet1Name')))]",
         "hubPeer1Array": "[split(variables('hubVnetName'),'-')]",
         "hubPeerArrayType": "[string(variables('hubPeer1Array')[2])]",
-        "spoke1PeerArray": "[split(variables('hubVnetName'),'-')]",
-        "spoke1PeerArrayType": "[string(variables('hubPeer1Array')[2])]"
+        "spoke1PeerArray": "[split(variables('spoke1VnetName'),'-')]",
+        "spoke1PeerArrayType": "[string(variables('spoke1PeerArray')[2])]"
         
     },
     "resources": [
