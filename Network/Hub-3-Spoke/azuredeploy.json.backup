@@ -326,6 +326,64 @@
                     }
                 ]
             }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('hubVnetName'), '/', variables('hubPeerArrayType'),'-to-', variables('spoke1PeerArrayType'))]",
+            "dependsOn": [
+                "[variables('hubVnetId')]",
+                "[variables('spoke1VnetId')]"
+            ],
+            "properties": {
+                "remoteVirtualNetwork": {
+                    "id": "[variables('spoke1VnetId')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "doNotVerifyRemoteGateways": false,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke1AddressSpace')]"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('spoke1AddressSpace')]"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('spoke1VnetName'), '/', variables('spoke1PeerArrayType'),'-to-', variables('hubPeerArrayType'))]",
+            "dependsOn": [
+                "[variables('hubVnetId')]",
+                "[variables('spoke1VnetId')]"
+            ],
+            "properties": {
+                "remoteVirtualNetwork": {
+                    "id": "[variables('hubVnetId')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": false,
+                "useRemoteGateways": true,
+                "doNotVerifyRemoteGateways": false,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubVnetAddressSpace')]"
+                    ]
+                },
+                "remoteVirtualNetworkAddressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('hubVnetAddressSpace')]"
+                    ]
+                }
+            }
         }
     ],
     "outputs": {}
