@@ -278,20 +278,6 @@
             "metadata": {
                 "description": "description"
             }
-        },
-        "pipZones": {
-            "type": "string",
-            "defaultValue": "Zone-redundant",
-            "allowedValues": [
-                "No-Zone",
-                "Zone-redundant",
-                "1",
-                "2",
-                "3"
-            ],
-            "metadata": {
-                "description": "description"
-            }
         }
     },
     "functions": [],
@@ -564,7 +550,11 @@
                 "name": "Standard",
                 "tier": "Regional"
             },
-            "zones": "[parameters('pipZones')]",
+            "zones": [
+                "1",
+                "2",
+                "3"
+            ],
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
