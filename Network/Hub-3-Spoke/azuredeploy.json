@@ -21,12 +21,14 @@
         },
         "hubVnetName": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of the Hub VNET. If new leave blank"
             }
         },
         "hubVnetResourceGroup": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of the Hub VNET. If new leave blank"
             }
@@ -47,6 +49,7 @@
         },
         "hubSubnet1Name": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Hub Subnet"
             }
@@ -71,12 +74,14 @@
         },
         "spoke1VnetName": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of First Spoke VNET"
             }
         },
         "spoke1ResouceGroup": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Existing Spoke Resource group"
             }
@@ -90,6 +95,7 @@
         },
         "spoke1Subnet1Name": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Spoke 1 Subnet 1"
             }
@@ -114,12 +120,14 @@
         },
         "spoke2VnetName": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Second Spoke VNET"
             }
         },
         "spoke2ResouceGroup": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Existing Spoke Resource group"
             }
@@ -133,6 +141,7 @@
         },
         "spoke2Subnet1Name": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Spoke 2 Subnet 1"
             }
@@ -157,12 +166,14 @@
         },
         "spoke3VnetName": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Spoke 3 VNET"
             }
         },
         "spoke3ResouceGroup": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Existing Spoke 3 Resource group"
             }
@@ -176,6 +187,7 @@
         },
         "spoke3Subnet1Name": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of Spoke 3 Subnet 1"
             }
