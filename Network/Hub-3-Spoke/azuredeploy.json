@@ -313,18 +313,23 @@
                 },
                 "subnets": [
                     {
-                        "name": "GatewaySubnet",
-                        "properties": {
-                            "addressPrefix": "[parameters('gatewaySubnetAddressSpace')]"
-                        }
-                    },
-                    {
                         "name": "[variables('hubSubnet1Name')]",
                         "properties": {
                             "addressPrefix": "[parameters('hubSubnet1AddressSpace')]"
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "name": "[concat(variables('hubVnetName'), '/GatewaySubnet')]",
+            "apiVersion": "2019-11-01",
+            "dependsOn": [
+                "[variables('hubVnetId')]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('gatewaySubnetAddressSpace')]"
             }
         },
         {
@@ -529,7 +534,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('gatewayPipId')]",
-                "[variables('hubVnetId')]"
+                "[variables('hubGwSubnet1Id')]"
             ],
             "properties": {
                 "ipConfigurations": [
