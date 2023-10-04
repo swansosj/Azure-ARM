@@ -198,6 +198,69 @@
             "metadata": {
                 "description": "Spoke 3 Subnet 1 Address Space"
             }
+        },
+        "gatewayPipNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewayPipName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewayPipRG": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewayNewOrExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewayName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewayRG": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "gatewaySku": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "VpnGw1",
+                "VpnGw2",
+                "VpnGw3"
+            ],
+            "metadata": {
+                "description": "The SKU of the Gateway, if deployed"
+            }
         }
     },
     "functions": [],
@@ -225,7 +288,11 @@
         "spoke2PeerArray": "[split(variables('spoke2VnetName'),'-')]",
         "spoke2PeerArrayType": "[string(variables('spoke2PeerArray')[2])]",
         "spoke3PeerArray": "[split(variables('spoke3VnetName'),'-')]",
-        "spoke3PeerArrayType": "[string(variables('spoke3PeerArray')[2])]"
+        "spoke3PeerArrayType": "[string(variables('spoke3PeerArray')[2])]",
+        "gatewayPipName": "[if(equals(parameters('gatewayPipName'),''),concat(parameters('customerName'),'-pip-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayPipName'))]",
+        "gatewayPipId": "[if(equals(parameters('gatewayPipNewOrExisting'),'new'),resourceId('Microsoft.Network/publicIPAddresses', variables('gatewayPipName')),resourceId(parameters('gatewayPipRG'),'Microsoft.Network/publicIPAddresses', parameters('gatewayPipName')))]",
+        "gatewayName": "[if(equals(parameters('gatewayNewOrExisting'),''),concat(parameters('customerName'),'-vgw-prod-', resourceGroup().location, '-000'),parameters('gatewayName'))]",
+        "gatewayId": "[if(equals(parameters('gatewayNewOrExisting'),'new'),resourceId('Microsoft.Network/virtualNetworkGateways', variables('gatewayName')),resourceId(parameters('gatewayRG'),'Microsoft.Network/virtualNetworkGateways', parameters('gatewayName')))]"
         
     },
     "resources": [
@@ -443,6 +510,48 @@
                 "remoteVirtualNetwork": {
                 "id": "[variables('hubVnetId')]"
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[variables('gatewayPipName')]",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "apiVersion": "2019-11-01",
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "name": "[variables('gatewayName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[variables('gatewayPipId')]",
+                "[variables('hubSubnet1Id')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                {
+                    "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[variables('hubSubnet1Id')]"
+                    },
+                    "publicIPAddress": {
+                        "id": "[variables('gatewayPipId')]"
+                    }
+                    },
+                    "name": "vnetGatewayConfig"
+                }
+                ],
+                "sku": {
+                "name": "[parameters('gatewaySku')]",
+                "tier": "[parameters('gatewaySku')]"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false
             }
         }
     ],
