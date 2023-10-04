@@ -252,6 +252,37 @@
                             "addressPrefix": "[parameters('hubSubnet1AddressSpace')]"
                         }
                     }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "hub-to-spoke",
+                        "dependsOn": [
+                            "[variables('hubVnetId')]",
+                            "[variables('spoke1VnetId')]"
+                        ],
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('hubVnetName'), 'hub-to-spoke')]",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('spoke1VnetName'))]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": true,
+                            "useRemoteGateways": false,
+                            "doNotVerifyRemoteGateways": false,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "[parameters('spoke1AddressSpace')]"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "[parameters('spoke1AddressSpace')]"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+                    }
                 ]
             }
         },
@@ -275,6 +306,37 @@
                         "properties": {
                             "addressPrefix": "[parameters('spoke1Subnet1AddressSpace')]"
                         }
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "spoke-to-hub",
+                        "dependsOn": [
+                            "[variables('hubVnetId')]",
+                            "[variables('spoke1VnetId')]"
+                        ],
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/virtualNetworkPeerings', parameters('spoke1VnetName'), 'spoke-to-hub')]",
+                        "properties": {
+                            "remoteVirtualNetwork": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('hubVnetName'))]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": true,
+                            "useRemoteGateways": false,
+                            "doNotVerifyRemoteGateways": false,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "[parameters('hubVnetAddressSpace')]"
+                                ]
+                            },
+                            "remoteVirtualNetworkAddressSpace": {
+                                "addressPrefixes": [
+                                    "[parameters('hubVnetAddressSpace')]"
+                                ]
+                            }
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
                     }
                 ]
             }
@@ -325,66 +387,6 @@
                         }
                     }
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('hubVnetName'), '/hub-to-spoke')]",
-            "dependsOn": [
-                "[variables('hubVnetId')]",
-                "[variables('spoke1VnetId')]"
-            ],
-            "properties": {
-                "peeringState": "Initiated",
-                "peeringSyncLevel": "RemoteNotInSync",
-                "remoteVirtualNetwork": {
-                    "id": "[variables('spoke1VnetId')]"
-                },
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": true,
-                "useRemoteGateways": false,
-                "doNotVerifyRemoteGateways": false,
-                "remoteAddressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('spoke1AddressSpace')]"
-                    ]
-                },
-                "remoteVirtualNetworkAddressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('spoke1AddressSpace')]"
-                    ]
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
-            "apiVersion": "2023-05-01",
-            "name": "[concat(parameters('hubVnetName'), '/spoke-to-hub')]",
-            "dependsOn": [
-                "[variables('hubVnetId')]",
-                "[variables('spoke1VnetId')]"
-            ],
-            "properties": {
-                "remoteVirtualNetwork": {
-                    "id": "[variables('hubVnetId')]"
-                },
-                "allowVirtualNetworkAccess": true,
-                "allowForwardedTraffic": true,
-                "allowGatewayTransit": true,
-                "useRemoteGateways": false,
-                "doNotVerifyRemoteGateways": false,
-                "remoteAddressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('hubVnetAddressSpace')]"
-                    ]
-                },
-                "remoteVirtualNetworkAddressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('hubVnetAddressSpace')]"
-                    ]
-                }
             }
         }
     ],
