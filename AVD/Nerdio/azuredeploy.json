@@ -47,24 +47,94 @@
         "databaseSkuName": {
             "type": "string",
             "defaultValue": "S1"
+        },
+        "webAppPortalName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Web App Portal"
+            }
+        },
+        "appServicePlanName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Nerdio App Service Plan"
+            }
+        },
+        "sqlServerName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of SQL Server Database"
+            }
+        },
+        "databaseName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Database"
+            }
+        },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Azure Key Vault"
+            }
+        },
+        "appInsightsName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Application Insights"
+            }
+        },
+        "automationAccountName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Automation Account"
+            }
+        },
+        "lawName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Log Analytics Workspace"
+            }
+        },
+        "logsLawName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Log Analytics Workspace"
+            }
+        },
+        "scriptedActionAccountName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Scripted Automation Account Name"
+            }
         }
     },
     "variables": {
-        "webAppPortalName": "[concat(parameters('customerName'), '-func-nerdio-prod-', resourceGroup().location, '-000')]",
-        "appServicePlanName": "[concat(parameters('customerName'), '-asp-nerdio-prod-', resourceGroup().location, '-000')]",
-        "sqlServerName": "[concat(parameters('customerName'), '-sqldw-nerdio-prod-', resourceGroup().location, '-000')]",
-        "databaseName": "[concat(parameters('customerName'), '-nerdio-prod-', resourceGroup().location, '-db')]",
-        "keyVaultName": "[concat(parameters('customerName'), '-rsv-nerdio-prod-', resourceGroup().location, '-000')]",
-        "appInsightsName": "[concat(parameters('customerName'), '-appi-nerdio-prod-', resourceGroup().location, '-000')]",
-        "automationAccountName": "[concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-001')]",
+        "webAppPortalName": "[if(equals(parameters('webAppPortalName'),''),concat(parameters('customerName'), '-func-nerdio-prod-', resourceGroup().location, '-000'), parameters('webAppPortalName'))]",
+        "appServicePlanName": "[if(equals(parameters('appServicePlanName'), ''),concat(parameters('customerName'), '-sqldw-nerdio-prod-', resourceGroup().location, '-000'), parameters('appServicePlanName'))]",
+        "sqlServerName": "[if(equals(parameters('sqlServerName'), ''),concat(parameters('customerName'), '-sqldw-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerName'))]",
+        "databaseName": "[if(equals(parameters('databaseName'), ''),concat(parameters('customerName'), '-nerdio-prod-', resourceGroup().location, '-db'), parameters('databaseName'))]",
+        "keyVaultName": "[if(equals(parameters('keyVaultName'), ''), concat(parameters('customerName'), '-rsv-nerdio-prod-', resourceGroup().location, '-000'), parameters('keyVaultName'))]",
+        "appInsightsName": "[if(equals(parameters('appInsightsName'), ''), concat(parameters('customerName'), '-appi-nerdio-prod-', resourceGroup().location, '-000'), parameters('appInsightsName'))]",
+        "automationAccountName": "[if(equals(parameters('automationAccountName'), ''), concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-001'), parameters('automationAccountName'))]",
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-        "lawName": "[concat(parameters('customerName'), '-log-nerdio-prod-', resourceGroup().location, '-000')]",
-        "logsLawName": "[concat(parameters('customerName'), '-log-nerdio-insights-prod-', resourceGroup().location, '-000')]",
+        "lawName": "[if(equals(parameters('lawName'), ''), concat(parameters('customerName'), '-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('lawName'))]",
+        "logsLawName": "[if(equals(parameters('logsLawName'), ''), concat(parameters('customerName'), '-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logsLawName'))]",
         "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, variables('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
         "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, variables('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
         "microsoftLoginUri": "[environment().authentication.loginEndpoint]",
-        "scriptedActionAccountName": "[concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-000')]",
+        "scriptedActionAccountName": "[if(equals(parameters('scriptedActionAccountName'), ''),concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('scriptedActionAccountName'))]",
         "_securityGuid": "[newGuid()]",
         "_artifactsLocationSasToken": "",
         "_artifactsLocation": "[deployment().properties.templateLink.uri]",
