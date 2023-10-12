@@ -23,6 +23,14 @@
                 "description": "Base name of the resource such as web app name and app service plan"
             }
         },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": "nmw-app",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            },
+            "minLength": 2
+        },
         "appServicePlanName": {
             "type": "string",
             "defaultValue": "",
@@ -42,13 +50,6 @@
             "defaultValue": "",
             "metadata": {
                 "description": "Name of the SQL Server Database"
-            }
-        },
-        "keyVaultName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of the Azure Key Vault"
             }
         },
         "appInsightsName": {
@@ -183,7 +184,7 @@
         "appServicePlanName": "[if(equals(parameters('appName'),''),concat(parameters('customerName'),'-asp-nerdio-prod-', resourceGroup().location, '-000'), parameters('appServicePlanName'))]",
         "sqlServerName": "[if(equals(parameters('sqlServerName'),''),concat(parameters('customerName'),'-sql-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerName'))]",
         "databaseName": "[if(equals(parameters('sqlServerName'),''),concat(parameters('customerName'),'-sqldb-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerDatabaseName'))]",
-        "keyVaultName": "[if(equals(parameters('keyVaultName'),''),concat(parameters('customerName'),'-kv-nerdio'), parameters('keyVaultName'))]",
+        "keyVaultName": "[concat(parameters('keyVaultName'), '-kv-', uniqueString(subscription().id, resourceGroup().id))]",
         "appInsightsName": "[if(equals(parameters('appInsightsName'),''),concat(parameters('customerName'),'-appi-nerdio-prod-', resourceGroup().location, '-000'), parameters('appInsightsName'))]",
         "automationAccountName": "[if(equals(parameters('automationAccountName'),''),concat(parameters('customerName'),'-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('automationAccountName'))]",
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
