@@ -3,10 +3,6 @@
         "code": "BadRequest",
         "message": "Validation errors while reading content link."
     }
-
-    https://catalogartifact.azureedge.net/publicartifacts/nerdio.nerdio_wvd_manager-f718418f-84d2-49ce-851e-4033d1bfbe5f-nwm-plan/Artifacts/mainTemplate.json
-
-    
 "Key Vault":
     {
         "code": "VaultNameNotValid",
@@ -16,4 +12,4 @@
 {
     "code": "Failed",
     "message": "Failed to download package.\r\nARM-MSDeploy Deploy Failed: 'System.AggregateException: One or more errors occurred. ---&gt; System.Net.WebException: The remote server returned an error: (404) Not Found.\r\n   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)\r\n   at System.Net.WebClient.GetWebResponse(WebRequest request, IAsyncResult result)\r\n   at System.Net.WebClient.DownloadBitsResponseCallback(IAsyncResult result)\r\n   --- End of inner exception stack trace ---\r\n   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)\r\n   at System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)\r\n   at System.Threading.Tasks.Task.Wait(TimeSpan timeout)\r\n   at Microsoft.Web.Deployment.WebApi.AppGalleryPackage.&lt;Download&gt;d__17.MoveNext() in C:\\__w\\1\\s\\src\\hosting\\wdeploy\\Microsoft.Web.Deployment.WebApi\\AppGalleryPackage.cs:line 196\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.Web.Deployment.WebApi.AppGalleryPackage.&lt;Download&gt;d__15.MoveNext() in C:\\__w\\1\\s\\src\\hosting\\wdeploy\\Microsoft.Web.Deployment.WebApi\\AppGalleryPackage.cs:line 93\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.Web.Deployment.WebApi.DeploymentController.&lt;DownloadPackageAndSettings&gt;d__27.MoveNext() in C:\\__w\\1\\s\\src\\hosting\\wdeploy\\Microsoft.Web.Deployment.WebApi\\Controllers\\DeploymentController.cs:line 623\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at Microsoft.Web.Deployment.WebApi.DeploymentController.&lt;DownloadAndDeployPackage&gt;d__25.MoveNext() in C:\\__w\\1\\s\\src\\hosting\\wdeploy\\Microsoft.Web.Deployment.WebApi\\Controllers\\DeploymentController.cs:line 491\r\n---&gt; (Inner Exception #0) System.Net.WebException: The remote server returned an error: (404) Not Found.\r\n   at System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)\r\n   at System.Net.WebClient.GetWebResponse(WebRequest request, IAsyncResult result)\r\n   at System.Net.WebClient.DownloadBitsResponseCallback(IAsyncResult result)&lt;---\r\n'"
-  }
+}
