@@ -25,7 +25,7 @@
         },
         "keyVaultName": {
             "type": "string",
-            "defaultValue": "nmw-app",
+            "defaultValue": "nerdio",
             "metadata": {
                 "description": "Base name of the resource such as web app name and app service plan"
             },
@@ -1082,45 +1082,6 @@
                     }
                 }
             ]
-        },
-        {
-            "condition": "[equals(parameters('logLawNewOrExisting'), 'existing')]",
-            "type": "Microsoft.OperationalInsights/workspaces/dataSources",
-            "apiVersion": "2020-08-01",
-            "name": "[concat(variables('logLawName'), '/SystemEvents')]",
-            "kind": "WindowsEvent",
-            "properties": {
-                "eventLogName": "System",
-                "eventTypes": [
-                    {
-                        "eventType": "Error"
-                    },
-                    {
-                        "eventType": "Warning"
-                    }
-                ]
-            }
-        },
-        {
-            "condition": "[equals(parameters('logLawNewOrExisting'), 'existing')]",
-            "type": "Microsoft.OperationalInsights/workspaces/dataSources",
-            "apiVersion": "2020-08-01",
-            "name": "[concat(variables('logLawName'), '/ApplicationEvents')]",
-            "kind": "WindowsEvent",
-            "properties": {
-                "eventLogName": "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
-                "eventTypes": [
-                    {
-                        "eventType": "Error"
-                    },
-                    {
-                        "eventType": "Warning"
-                    },
-                    {
-                        "eventType": "Information"
-                    }
-                ]
-            }
         }
     ],
     "outputs": {
