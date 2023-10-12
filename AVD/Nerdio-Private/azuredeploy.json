@@ -114,7 +114,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://catalogartifact.azureedge.net/publicartifacts/nerdio.nerdio_wvd_manager-f718418f-84d2-49ce-851e-4033d1bfbe5f-nwm-plan/Artifacts/mainTemplate.json"
+            "defaultValue": "[deployment().properties.templateLink.uri]"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -190,7 +190,7 @@
         "logLawName": "[if(equals(parameters('logLawName'),''),concat(parameters('customerName'),'-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('logLawName'))]",
         "logLawID": "[if(equals(parameters('logLawNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName')),resourceId(parameters('logLawResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawName')))]",
         "logLawInsightsName": "[if(equals(parameters('logLawInsightsName'),''),concat(parameters('customerName'),'-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logLawInsightsName'))]",
-        "logsLawInsightsID": "[if(equals(parameters('logLawInsightsNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')),resourceId(parameters('logLawInsightsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawName')))]",
+        "logsLawInsightsID": "[if(equals(parameters('logLawInsightsNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')),resourceId(parameters('logLawInsightsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')))]",
         "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
         "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
