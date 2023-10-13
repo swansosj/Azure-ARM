@@ -23,11 +23,127 @@
                 "description": "Base name of the resource such as web app name and app service plan"
             }
         },
+        "appServiceVnetNeworExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "appServiceVnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServiceExistingVnetResourceGroup": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Existing Vnet for App Service"
+            }
+        },
+        "appServiceVnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "IP Prefix for App Service VNET"
+            }
+        },
+        "appServicePrivateEndpointSubnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServicePrivateEndpointSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/24",
+            "metadata": {
+                "description": "IP Prefix for App Service Private Endpoint Subnet"
+            }
+        },
+        "appServiceIntegrationSubnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServiceIntegrationSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "IP Prefix for App Service Integration SubnetT"
+            }
+        },
+        "appServicePrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "appServicePrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "sqlServerPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "sqlServerPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "keyVaultPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "keyVaultPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
         "keyVaultPrefix": {
             "type": "string",
             "defaultValue": "nerdio",
             "metadata": {
-                "description": "Key Vault Name"
+                "description": "Key Vault Name Prefix"
             }
         },
         "appServicePlanName": {
@@ -188,14 +304,25 @@
         "automationAccountName": "[if(equals(parameters('automationAccountName'),''),concat(parameters('customerName'),'-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('automationAccountName'))]",
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
         "logLawName": "[if(equals(parameters('logLawName'),''),concat(parameters('customerName'),'-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('logLawName'))]",
-        "logLawID": "[if(equals(parameters('logLawNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName')),resourceId(parameters('logLawResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawName')))]",
         "logLawInsightsName": "[if(equals(parameters('logLawInsightsName'),''),concat(parameters('customerName'),'-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logLawInsightsName'))]",
-        "logsLawInsightsID": "[if(equals(parameters('logLawInsightsNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')),resourceId(parameters('logLawInsightsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')))]",
         "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
         "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
         "microsoftLoginUri": "[environment().authentication.loginEndpoint]",
         "scriptedActionAccountName": "[if(equals(parameters('scriptedActionAccountName'),''),concat(parameters('customerName'),'-aa-scripted-action-nerdio-prod-', resourceGroup().location, '-000'), parameters('scriptedActionAccountName'))]",
+        "appServiceVnetName": "[if(equals(parameters('appServiceVnetName'), ''),concat(parameters('customerName'), '-vnet-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServiceVnetName'))]",
+        "appServicePrivateEndpointSubnetName": "[if(equals(parameters('appServicePrivateEndpointSubnetName'), ''),concat(parameters('customerName'), '-snet-func-nerdio-pe-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointSubnetName'))]",
+        "appServiceIntegrationSubnetName": "[if(equals(parameters('appServiceIntegrationSubnetName'), ''),concat(parameters('customerName'), '-snet-func-nerdio-integration-prod-',resourceGroup().location, '-000'), parameters('appServiceIntegrationSubnetName'))]",
+        "appServicePrivateEndpointName": "[if(equals(parameters('appServicePrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointName'))]",
+        "appServicePrivateEndpointNicName": "[if(equals(parameters('appServicePrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointName'))]",
+        "sqlServerPrivateEndpointName": "[if(equals(parameters('sqlServerPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-sql-nerdio-prod-',resourceGroup().location, '-000'), parameters('sqlServerPrivateEndpointName'))]",
+        "sqlServerPrivateEndpointNicName": "[if(equals(parameters('sqlServerPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-sql-nerdio-prod-',resourceGroup().location, '-000'), parameters('sqlServerPrivateEndpointNicName'))]",
+        "keyVaultPrivateEndpointName": "[if(equals(parameters('keyVaultPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-kv-nerdio-prod-',resourceGroup().location, '-000'), parameters('keyVaultPrivateEndpointName'))]",
+        "keyVaultPrivateEndpointNicName": "[if(equals(parameters('keyVaultPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-kv-nerdio-prod-',resourceGroup().location, '-000'), parameters('keyVaultPrivateEndpointNicName'))]",
+        "autoAccountPrivateEndpointName": "[if(equals(parameters('autoAccountPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointName'))]",
+        "autoAccountPrivateEndpointNicName": "[if(equals(parameters('autoAccountPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointNicName'))]",
+        "dnsZoneSites": "privatelink.azurewebsites.net",
+        "dnsZoneDatabase": "privatelink.database.windows.net",
         "automation": {
             "runbooks": [
                 {
@@ -252,6 +379,34 @@
                     "contentVersion": "1.0.0.0",
                     "resources": []
                 }
+            }
+        },
+        {
+            "condition": "[equals(parameters('appServiceVnetNeworExisting'), 'new')]",
+            "name": "[variables('appServiceVnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('appServiceVnetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('appServicePrivateEndpointSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('appServicePrivateEndpointSubnetPrefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('appServiceIntegrationSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('appServiceIntegrationSubnetPrefix')]"
+                        }
+                    }
+                ]
             }
         },
         {
