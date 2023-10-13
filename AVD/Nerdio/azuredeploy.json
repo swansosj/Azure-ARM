@@ -11,8 +11,65 @@
         },
         "customerName": {
             "type": "string",
+            "defaultValue": "",
             "metadata": {
                 "description": "Name of the Customer"
+            }
+        },
+        "appName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            }
+        },
+        "keyVaultPrefix": {
+            "type": "string",
+            "defaultValue": "nerdio",
+            "metadata": {
+                "description": "Key Vault Name"
+            }
+        },
+        "appServicePlanName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the App Service Plan"
+            }
+        },
+        "sqlServerName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the SQL Server"
+            }
+        },
+        "sqlServerDatabaseName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the SQL Server Database"
+            }
+        },
+        "appInsightsName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Azure Application Insights"
+            }
+        },
+        "automationAccountName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Automation Account"
+            }
+        },
+        "scriptedActionAccountName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Scripted Action Automation Account"
             }
         },
         "azureTagPrefix": {
@@ -48,102 +105,64 @@
             "type": "string",
             "defaultValue": "S1"
         },
-        "webAppPortalName": {
+        "automationRoleAssignmentName": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
+            },
+            "defaultValue": "https://catalogartifact.azureedge.net/publicartifacts/nerdio.nerdio_wvd_manager-f718418f-84d2-49ce-851e-4033d1bfbe5f-nwm-plan/Artifacts/mainTemplate.json"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+            },
+            "defaultValue": ""
+        },
+        "_securityGuid": {
+            "type": "securestring",
+            "defaultValue": "[newGuid()]"
+        },
+        "logLawName": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "Name of Web App Portal"
+                "description": "Name of Log Analytics Workspace. If no name is provided a default name will be used"
             }
         },
-        "appServicePlanName": {
+        "logLawInsightsName": {
             "type": "string",
             "defaultValue": "",
             "metadata": {
-                "description": "Name of Nerdio App Service Plan"
-            }
-        },
-        "sqlServerName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of SQL Server Database"
-            }
-        },
-        "databaseName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of the Database"
-            }
-        },
-        "keyVaultName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of Azure Key Vault"
-            }
-        },
-        "appInsightsName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of Application Insights"
-            }
-        },
-        "automationAccountName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of Automation Account"
-            }
-        },
-        "lawName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of Log Analytics Workspace"
-            }
-        },
-        "logsLawName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Name of Log Analytics Workspace"
-            }
-        },
-        "scriptedActionAccountName": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Scripted Automation Account Name"
+                "description": "Name of Log Analytics Insights Workspace. If no name is provided a default name will be used"
             }
         }
     },
     "variables": {
-        "webAppPortalName": "[if(equals(parameters('webAppPortalName'),''),concat(parameters('customerName'), '-func-nerdio-prod-', resourceGroup().location, '-000'), parameters('webAppPortalName'))]",
-        "appServicePlanName": "[if(equals(parameters('appServicePlanName'), ''),concat(parameters('customerName'), '-sqldw-nerdio-prod-', resourceGroup().location, '-000'), parameters('appServicePlanName'))]",
-        "sqlServerName": "[if(equals(parameters('sqlServerName'), ''),concat(parameters('customerName'), '-sqldw-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerName'))]",
-        "databaseName": "[if(equals(parameters('databaseName'), ''),concat(parameters('customerName'), '-nerdio-prod-', resourceGroup().location, '-db'), parameters('databaseName'))]",
-        "keyVaultName": "[if(equals(parameters('keyVaultName'), ''), concat(parameters('customerName'), '-rsv-nerdio-prod-', resourceGroup().location, '-000'), parameters('keyVaultName'))]",
-        "appInsightsName": "[if(equals(parameters('appInsightsName'), ''), concat(parameters('customerName'), '-appi-nerdio-prod-', resourceGroup().location, '-000'), parameters('appInsightsName'))]",
-        "automationAccountName": "[if(equals(parameters('automationAccountName'), ''), concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-001'), parameters('automationAccountName'))]",
+        "webAppPortalName": "[if(equals(parameters('appName'),''),concat(parameters('customerName'),'-func-nerdio-prod-', resourceGroup().location, '-000'), parameters('appName'))]",
+        "appServicePlanName": "[if(equals(parameters('appName'),''),concat(parameters('customerName'),'-asp-nerdio-prod-', resourceGroup().location, '-000'), parameters('appServicePlanName'))]",
+        "sqlServerName": "[if(equals(parameters('sqlServerName'),''),concat(parameters('customerName'),'-sql-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerName'))]",
+        "databaseName": "[if(equals(parameters('sqlServerName'),''),concat(parameters('customerName'),'-sqldb-nerdio-prod-', resourceGroup().location, '-000'), parameters('sqlServerDatabaseName'))]",
+        "keyVaultName": "[concat(parameters('keyVaultPrefix'), '-kv-', uniqueString(subscription().id, resourceGroup().id))]",
+        "appInsightsName": "[if(equals(parameters('appInsightsName'),''),concat(parameters('customerName'),'-appi-nerdio-prod-', resourceGroup().location, '-000'), parameters('appInsightsName'))]",
+        "automationAccountName": "[if(equals(parameters('automationAccountName'),''),concat(parameters('customerName'),'-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('automationAccountName'))]",
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-        "lawName": "[if(equals(parameters('lawName'), ''), concat(parameters('customerName'), '-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('lawName'))]",
-        "logsLawName": "[if(equals(parameters('logsLawName'), ''), concat(parameters('customerName'), '-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logsLawName'))]",
-        "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, variables('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
-        "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, variables('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
+        "logLawName": "[if(equals(parameters('logLawName'),''),concat(parameters('customerName'),'-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('logLawName'))]",
+        "logLawInsightsName": "[if(equals(parameters('logLawInsightsName'),''),concat(parameters('customerName'),'-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logLawInsightsName'))]",
+        "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
+        "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
         "microsoftLoginUri": "[environment().authentication.loginEndpoint]",
-        "scriptedActionAccountName": "[if(equals(parameters('scriptedActionAccountName'), ''),concat(parameters('customerName'), '-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('scriptedActionAccountName'))]",
-        "_securityGuid": "[newGuid()]",
-        "_artifactsLocationSasToken": "",
-        "_artifactsLocation": "[deployment().properties.templateLink.uri]",
-        "automationRoleAssignmentName": "[newGuid()]",
+        "scriptedActionAccountName": "[if(equals(parameters('scriptedActionAccountName'),''),concat(parameters('customerName'),'-aa-scripted-action-nerdio-prod-', resourceGroup().location, '-000'), parameters('scriptedActionAccountName'))]",
         "automation": {
             "runbooks": [
                 {
                     "name": "nmwUpdateRunAs",
-                    "url": "[uri(variables('_artifactsLocation'), concat('scripts/nmw-update-run-as.ps1', variables('_artifactsLocationSasToken')))]",
+                    "url": "[uri(parameters('_artifactsLocation'), concat('scripts/nmw-update-run-as.ps1', parameters('_artifactsLocationSasToken')))]",
                     "version": "1.0.0.0",
                     "type": "PowerShell",
                     "description": "Update using automation Run As account"
@@ -200,7 +219,7 @@
         {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('logsLawName')]",
+            "name": "[variables('logLawInsightsName')]",
             "location": "[parameters('location')]"
         },
         {
@@ -208,7 +227,7 @@
             "name": "[variables('appInsightsName')]",
             "type": "Microsoft.Insights/components",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logsLawName'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
             ],
             "location": "[parameters('location')]",
             "kind": "web",
@@ -217,7 +236,7 @@
             },
             "properties": {
                 "Application_Type": "web",
-                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logsLawName'))]"
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
             }
         },
         {
@@ -358,7 +377,7 @@
                         },
                         {
                             "name": "Deployment:LogAnalyticsWorkspace",
-                            "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                            "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                         },
                         {
                             "name": "Deployment:ScriptedActionAccount",
@@ -389,7 +408,7 @@
                         "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
                     ],
                     "properties": {
-                        "packageUri": "[uri(variables('_artifactsLocation'), concat('web-app/app.zip', variables('_artifactsLocationSasToken')))]"
+                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip', parameters('_artifactsLocationSasToken')))]"
                     }
                 }
             ]
@@ -512,7 +531,7 @@
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2022-04-01",
-            "name": "[variables('automationRoleAssignmentName')]",
+            "name": "[parameters('automationRoleAssignmentName')]",
             "scope": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
@@ -584,7 +603,7 @@
         {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "name": "[variables('lawName')]",
+            "name": "[variables('logLawName')]",
             "location": "[parameters('location')]",
             "tags": {
                 "NMW_OBJECT_TYPE": "LOG_ANALYTICS_WORKSPACE"
@@ -595,7 +614,7 @@
                     "type": "datasources",
                     "name": "SystemEvents",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -615,7 +634,7 @@
                     "type": "datasources",
                     "name": "ApplicationEvents",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -635,7 +654,7 @@
                     "type": "datasources",
                     "name": "TerminalServicesLocalSessionManagerOperational",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -658,7 +677,7 @@
                     "type": "datasources",
                     "name": "TerminalServicesRemoteConnectionManagerAdmin",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -681,7 +700,7 @@
                     "type": "datasources",
                     "name": "MicrosoftFSLogixAppsOperational",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -704,7 +723,7 @@
                     "type": "datasources",
                     "name": "MicrosoftFSLogixAppsAdmin",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsEvent",
                     "properties": {
@@ -727,7 +746,7 @@
                     "type": "datasources",
                     "name": "perfcounter1",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -742,7 +761,7 @@
                     "type": "datasources",
                     "name": "perfcounter2",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -757,7 +776,7 @@
                     "type": "datasources",
                     "name": "perfcounter3",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -772,7 +791,7 @@
                     "type": "datasources",
                     "name": "perfcounter4",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -787,7 +806,7 @@
                     "type": "datasources",
                     "name": "perfcounter5",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -802,7 +821,7 @@
                     "type": "datasources",
                     "name": "perfcounter6",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -817,7 +836,7 @@
                     "type": "datasources",
                     "name": "perfcounter7",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -832,7 +851,7 @@
                     "type": "datasources",
                     "name": "perfcounter8",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -847,7 +866,7 @@
                     "type": "datasources",
                     "name": "perfcounter9",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -862,7 +881,7 @@
                     "type": "datasources",
                     "name": "perfcounter10",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -877,7 +896,7 @@
                     "type": "datasources",
                     "name": "perfcounter11",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -892,7 +911,7 @@
                     "type": "datasources",
                     "name": "perfcounter12",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -907,7 +926,7 @@
                     "type": "datasources",
                     "name": "perfcounter18",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -922,7 +941,7 @@
                     "type": "datasources",
                     "name": "perfcounter19",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -937,7 +956,7 @@
                     "type": "datasources",
                     "name": "perfcounter20",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -952,7 +971,7 @@
                     "type": "datasources",
                     "name": "perfcounter21",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -967,7 +986,7 @@
                     "type": "datasources",
                     "name": "perfcounter22",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -982,7 +1001,7 @@
                     "type": "datasources",
                     "name": "perfcounter23",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -997,7 +1016,7 @@
                     "type": "datasources",
                     "name": "perfcounter24",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
@@ -1012,7 +1031,7 @@
                     "type": "datasources",
                     "name": "perfcounter25",
                     "dependsOn": [
-                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('lawName'))]"
+                        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
                     ],
                     "kind": "WindowsPerformanceCounter",
                     "properties": {
