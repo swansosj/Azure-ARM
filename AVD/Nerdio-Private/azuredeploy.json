@@ -369,6 +369,7 @@
         "dnsZoneMonitor": "privatelink.monitor.azure.com",
         "dnsZoneOdsInsights": "privatelink.ods.opinsights.azure.com",
         "dnsZoneOmsInsights": "privatelink.oms.opinsights.azure.com",
+        "dnsZoneAgentInsights": "privatelink.agentsvc.azure-automation.net",
         "automation": {
             "runbooks": [
                 {
@@ -926,6 +927,16 @@
             "properties": {}
         },
         {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneAgentInsights')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
             "apiVersion": "2023-05-01",
             "name": "[concat(variables('lawInsightsPrivateEndpointName'), '/default')]",
@@ -934,7 +945,8 @@
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneBlob'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneMonitor'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOdsInsights'))]",
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]"
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
             ],
             "properties": {
                 "privateDnsZoneConfigs": [
@@ -954,6 +966,12 @@
                         "name": "privatelink-ods-opinsights-azure-com",
                         "properties": {
                             "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOdsInsights'))]"
+                        }
+                    },
+                    {
+                        "name": "privatelink-agentsvc-azure-automation-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
                         }
                     },
                     {
@@ -1020,6 +1038,22 @@
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneAgentInsights'), format('{0}-link', variables('dnsZoneAgentInsights')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
             "properties": {
