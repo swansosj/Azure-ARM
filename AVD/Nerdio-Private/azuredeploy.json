@@ -799,7 +799,7 @@
         {
             "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
             "apiVersion": "2018-09-01",
-            "name": "[concat(variables('dnsZoneAa'), '/', variables('dnsZoneAa'), '-link')]",
+            "name": "[concat(variables('dnsZoneAa'), '/', variables('dnsZoneAa'), '-link2')]",
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]",
