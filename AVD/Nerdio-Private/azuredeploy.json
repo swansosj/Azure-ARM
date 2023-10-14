@@ -417,7 +417,7 @@
             "apiVersion": "2023-05-01",
             "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
             ],
             "properties": {
                 "addressPrefixes": [
