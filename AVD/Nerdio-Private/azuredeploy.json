@@ -832,7 +832,10 @@
             "type": "microsoft.insights/privatelinkscopes",
             "apiVersion": "2021-07-01-preview",
             "name": "[variables('lawInsightsPrivateLinkScopeName')]",
-            "location": "global",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
+            ],
             "properties": {
                 "accessModeSettings": {
                     "exclusions": [],
@@ -848,7 +851,8 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
             ],
             "properties": {
                 "privateLinkServiceConnections": [
