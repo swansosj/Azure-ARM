@@ -882,18 +882,6 @@
             }
         },
         {
-            "type": "microsoft.insights/privatelinkscopes/scopedresources",
-            "apiVersion": "2021-07-01-preview",
-            "name": "[concat(variables('lawInsightsPrivateLinkScopeName'), '/scoped-', variables('logLawName'))]",
-            "dependsOn": [
-                "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
-            ],
-            "properties": {
-                "linkedResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
-            }
-        },
-        {
             "type": "Microsoft.Network/privateDnsZones",
             "apiVersion": "2018-09-01",
             "name": "[variables('dnsZoneBlob')]",
