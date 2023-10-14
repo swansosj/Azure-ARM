@@ -551,7 +551,7 @@
         {
             "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
             "apiVersion": "2023-05-01",
-            "name": "[concat(variables('appServicePrivateEndpointName'), '/default')]",
+            "name": "[concat(variables('sqlServerPrivateEndpointName'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateEndpoints', variables('sqlServerPrivateEndpointName'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]"
