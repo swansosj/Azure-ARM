@@ -423,7 +423,16 @@
                 "addressPrefixes": [
                     "[parameters('appServiceIntegrationSubnetPrefix')]"
                 ],
-                "delegations": [],
+                "delegations": [
+                    {
+                        "name": "Microsoft.Web.serverFarms",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName')), '/delegations/Microsoft.Web.serverFarms')]",
+                        "properties": {
+                            "serviceName": "Microsoft.Web/serverFarms"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets/delegations"
+                    }
+                ],
                 "privateEndpointNetworkPolicies": "Disabled",
                 "privateLinkServiceNetworkPolicies": "Enabled"
             }
