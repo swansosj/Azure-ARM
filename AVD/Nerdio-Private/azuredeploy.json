@@ -797,22 +797,6 @@
             }
         },
         {
-            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-            "apiVersion": "2018-09-01",
-            "name": "[concat(variables('dnsZoneAa'), '/', variables('dnsZoneAa'), '-link2')]",
-            "location": "global",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
-            ],
-            "properties": {
-                "registrationEnabled": false,
-                "virtualNetwork": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
-                }
-            }
-        },
-        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
