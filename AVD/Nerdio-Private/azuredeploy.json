@@ -139,6 +139,20 @@
                 "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
             }
         },
+        "autoAccountScriptedPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountScriptedPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
         "keyVaultPrefix": {
             "type": "string",
             "defaultValue": "nerdio",
@@ -321,6 +335,8 @@
         "keyVaultPrivateEndpointNicName": "[if(equals(parameters('keyVaultPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-kv-nerdio-prod-',resourceGroup().location, '-000'), parameters('keyVaultPrivateEndpointNicName'))]",
         "autoAccountPrivateEndpointName": "[if(equals(parameters('autoAccountPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointName'))]",
         "autoAccountPrivateEndpointNicName": "[if(equals(parameters('autoAccountPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointNicName'))]",
+        "scriptedAutoAccountPrivateEndpointName": "[if(equals(parameters('autoAccountScriptedPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-aa-script-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountScriptedPrivateEndpointName'))]",
+        "scriptAutoAccountPrivateEndpointNicName": "[if(equals(parameters('autoAccountScriptedPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-aa-script-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointNicName'))]",
         "dnsZoneSites": "privatelink.azurewebsites.net",
         "dnsZoneDatabase": "privatelink.database.windows.net",
         "dnsZoneKeyVault": "privatelink.vaultcore.azure.net",
@@ -734,6 +750,69 @@
             }
         },
         {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('scriptedAutoAccountPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('scriptedAutoAccountPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('scriptedAutoAccountPrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('scriptedAutoAccountPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]",
+                            "groupIds": [
+                                "DSCAndHybridWorker"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('scriptAutoAccountPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('scriptedAutoAccountPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('scriptedAutoAccountPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-vaultcore-azure-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[concat(variables('dnsZoneAa'), '/', variables('dnsZoneAa'), '-link')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
@@ -976,6 +1055,7 @@
             "name": "[variables('scriptedActionAccountName')]",
             "location": "[parameters('location')]",
             "properties": {
+                "publicNetworkAccess": false,
                 "sku": {
                     "name": "Basic"
                 }
