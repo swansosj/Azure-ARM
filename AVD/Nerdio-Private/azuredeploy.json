@@ -1034,7 +1034,8 @@
                 }
             ],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
             ]
         },
         {
@@ -1112,7 +1113,8 @@
             "scope": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
-                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
             ],
             "properties": {
                 "roleDefinitionId": "[variables('contributorRoleId')]",
