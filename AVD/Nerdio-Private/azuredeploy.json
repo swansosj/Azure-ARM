@@ -459,7 +459,7 @@
                         }
                     }
                 ],
-                "customNetworkInterfaceName": "[concat(variables('appServicePrivateEndpointName'), '-nic')]",
+                "customNetworkInterfaceName": "[variables('appServicePrivateEndpointNicName')]",
                 "subnet": {
                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
                 }
@@ -501,6 +501,79 @@
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('sqlServerPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('sqlServerPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('sqlServerName')), concat('/privateLinkServiceConnections/', variables('sqlServerPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]",
+                            "groupIds": [
+                                "sqlServer"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('sqlServerPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneDatabase')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('appServicePrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('sqlServerPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-database-windows-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneDatabase'), format('{0}-link', variables('dnsZoneDatabase')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
             "properties": {
