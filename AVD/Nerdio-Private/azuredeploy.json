@@ -873,7 +873,8 @@
                 ],
                 "enabledForDeployment": false,
                 "enableSoftDelete": true,
-                "softDeleteRetentionInDays": 90
+                "softDeleteRetentionInDays": 90,
+                "publicNetworkAccess": "Disabled"
             },
             "resources": [
                 {
