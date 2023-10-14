@@ -472,6 +472,7 @@
             "name": "[variables('dnsZoneSites')]",
             "location": "global",
             "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
             "properties": {}
@@ -501,6 +502,7 @@
             "name": "[format('{0}/{1}', variables('dnsZoneSites'), format('{0}-link', variables('dnsZoneSites')))]",
             "location": "global",
             "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
