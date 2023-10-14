@@ -717,19 +717,6 @@
                         "name": "[parameters('databaseSkuName')]",
                         "tier": "[parameters('databaseTier')]"
                     }
-                },
-                {
-                    "type": "firewallrules",
-                    "apiVersion": "2021-11-01",
-                    "dependsOn": [
-                        "[variables('sqlserverName')]"
-                    ],
-                    "location": "[parameters('location')]",
-                    "name": "AllowAllWindowsAzureIps",
-                    "properties": {
-                        "endIpAddress": "0.0.0.0",
-                        "startIpAddress": "0.0.0.0"
-                    }
                 }
             ]
         },
