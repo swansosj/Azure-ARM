@@ -441,7 +441,7 @@
             "type": "Microsoft.Network/privateEndpoints",
             "apiVersion": "2023-05-01",
             "name": "[variables('appServicePrivateEndpointName')]",
-            "location": "eastus",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
@@ -455,21 +455,14 @@
                             "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
                             "groupIds": [
                                 "sites"
-                            ],
-                            "privateLinkServiceConnectionState": {
-                                "status": "Approved",
-                                "actionsRequired": "None"
-                            }
+                            ]
                         }
                     }
                 ],
-                "manualPrivateLinkServiceConnections": [],
                 "customNetworkInterfaceName": "[concat(variables('appServicePrivateEndpointName'), '-nic')]",
                 "subnet": {
                     "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
-                },
-                "ipConfigurations": [],
-                "customDnsConfigs": []
+                }
             }
         },
         {
@@ -477,6 +470,9 @@
             "apiVersion": "2018-09-01",
             "name": "[variables('dnsZoneSites')]",
             "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
             "properties": {}
         },
         {
