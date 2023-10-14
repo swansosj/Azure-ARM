@@ -324,6 +324,7 @@
         "dnsZoneSites": "privatelink.azurewebsites.net",
         "dnsZoneDatabase": "privatelink.database.windows.net",
         "dnsZoneKeyVault": "privatelink.vaultcore.azure.net",
+        "dnsZoneAa": "privatelink.azure-automation.net",
         "automation": {
             "runbooks": [
                 {
@@ -650,6 +651,79 @@
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneKeyVault'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('autoAccountPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('autoAccountPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('autoAccountPrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('autoAccountPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('keyVaultName'))]",
+                            "groupIds": [
+                                "DSCAndHybridWorker"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('autoAccountPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneAa')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('autoAccountPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('autoAccountPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-vaultcore-azure-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneAa'), format('{0}-link', variables('dnsZoneAa')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
             "properties": {
