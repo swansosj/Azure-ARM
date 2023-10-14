@@ -462,7 +462,8 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
             ],
             "properties": {
                 "privateLinkServiceConnections": [
@@ -490,7 +491,8 @@
             "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
             ],
             "properties": {}
         },
@@ -500,7 +502,8 @@
             "name": "[concat(variables('appServicePrivateEndpointName'), '/default')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/privateEndpoints', variables('appServicePrivateEndpointName'))]",
-                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]"
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
             ],
             "properties": {
                 "privateDnsZoneConfigs": [
@@ -521,7 +524,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
                 "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
             ],
             "properties": {
                 "registrationEnabled": false,
