@@ -393,20 +393,39 @@
                         "[parameters('appServiceVnetPrefix')]"
                     ]
                 },
-                "subnets": [
-                    {
-                        "name": "[variables('appServicePrivateEndpointSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('appServicePrivateEndpointSubnetPrefix')]"
-                        }
-                    },
-                    {
-                        "name": "[variables('appServiceIntegrationSubnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('appServiceIntegrationSubnetPrefix')]"
-                        }
-                    }
-                ]
+                "subnets": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "[parameters('appServicePrivateEndpointSubnetPrefix')]"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "[parameters('appServiceIntegrationSubnetPrefix')]"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
             }
         },
         {
