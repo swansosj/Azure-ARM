@@ -832,7 +832,7 @@
             "type": "microsoft.insights/privatelinkscopes",
             "apiVersion": "2021-07-01-preview",
             "name": "[variables('lawInsightsPrivateLinkScopeName')]",
-            "location": "[parameters('location')]",
+            "location": "global",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
             ],
