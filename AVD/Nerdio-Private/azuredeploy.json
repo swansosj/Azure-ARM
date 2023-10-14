@@ -853,7 +853,7 @@
             "dependsOn": [
                 "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
-                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
             ],
             "properties": {
                 "privateLinkServiceConnections": [
