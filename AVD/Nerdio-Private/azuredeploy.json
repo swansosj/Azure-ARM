@@ -617,6 +617,7 @@
             "properties": {
                 "administratorLogin": "[variables('sqlServerLogin')]",
                 "administratorLoginPassword": "[variables('sqlServerPassword')]",
+                "publicNetworkAccess": "Disabled",
                 "version": "12.0",
                 "minimalTlsVersion": "1.2"
             },
