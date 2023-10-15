@@ -530,17 +530,11 @@
             "apiVersion": "2023-05-01",
             "name": "[variables('natGtwyPipName')]",
             "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/natGateways', variables('natGtwyName'))]"
-            ],
             "sku": {
                 "name": "Standard",
                 "tier": "Regional"
             },
             "properties": {
-                "natGateway": {
-                    "id": "[resourceId('Microsoft.Network/natGateways', variables('natGtwyName'))]"
-                },
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
                 "idleTimeoutInMinutes": 4,
