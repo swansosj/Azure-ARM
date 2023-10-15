@@ -1,0 +1,102 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vmName": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string",
+        "defaultValue": "[utcNow()]"
+      },
+      "automationAccountName": {
+        "type": "string"
+      },
+      "automationAccountRegion": {
+        "type": "string"
+      },
+      "hybridWorkerGroupName": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "hybridRunbookWorkerName": "[guid('hrw', parameters('date'))]",
+      "aaRegion": "[if(empty(parameters('automationAccountRegion')), parameters('location'), parameters('automationAccountRegion'))]",
+      "deploymentName": "[concat(if(greater(length(parameters('vmName')), 29), substring(parameters('vmName'), 0, 29), parameters('vmName')),'-HybridWorker-', parameters('date'))]"
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Automation/automationAccounts",
+        "apiVersion": "2021-06-22",
+        "name": "[parameters('automationAccountName')]",
+        "location": "[variables('aaRegion')]",
+        "properties": {
+          "sku": {
+            "name": "Basic"
+          }
+        },
+        "resources": [
+          {
+            "name": "[parameters('hybridWorkerGroupName')]",
+            "type": "hybridRunbookWorkerGroups",
+            "apiVersion": "2022-02-22",
+            "dependsOn": [
+              "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))]"
+            ],
+            "resources": [
+              {
+                "name": "[variables('hybridRunbookWorkerName')]",
+                "type": "hybridRunbookWorkers",
+                "apiVersion": "2021-06-22",
+                "dependsOn": [
+                  "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))]",
+                  "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', parameters('automationAccountName'),parameters('hybridWorkerGroupName'))]"
+                ],
+                "properties": {
+                  "vmResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "[variables('deploymentName')]",
+        "type": "Microsoft.Resources/deployments",
+        "apiVersion": "2020-10-01",
+        "dependsOn": [
+          "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))]",
+          "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', parameters('automationAccountName'), parameters('hybridWorkerGroupName'))]",
+          "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', parameters('automationAccountName'), parameters('hybridWorkerGroupName'))]"
+        ],
+        "properties": {
+          "mode": "Incremental",
+          "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "resources": [
+              {
+                "name": "[concat(parameters('vmName'),'/HybridWorkerExtension')]",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "location": "[parameters('location')]",
+                "apiVersion": "2022-03-01",
+                "properties": {
+                  "publisher": "Microsoft.Azure.Automation.HybridWorker",
+                  "type": "HybridWorkerForWindows",
+                  "typeHandlerVersion": "1.1",
+                  "autoUpgradeMinorVersion": true,
+                  "enableAutomaticUpgrade": true,
+                  "settings": {
+                    "AutomationAccountURL": "[reference(resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))).AutomationHybridServiceUrl]"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }

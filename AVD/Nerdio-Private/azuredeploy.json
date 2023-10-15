@@ -23,11 +23,162 @@
                 "description": "Base name of the resource such as web app name and app service plan"
             }
         },
+        "appServiceVnetNeworExisting": {
+            "type": "string",
+            "defaultValue": "new",
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "metadata": {
+                "description": "description"
+            }
+        },
+        "appServiceVnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServiceExistingVnetResourceGroup": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Existing Vnet for App Service"
+            }
+        },
+        "appServiceVnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "IP Prefix for App Service VNET"
+            }
+        },
+        "appServicePrivateEndpointSubnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServicePrivateEndpointSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/24",
+            "metadata": {
+                "description": "IP Prefix for App Service Private Endpoint Subnet"
+            }
+        },
+        "appServiceIntegrationSubnetName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of Vnet for App Service"
+            }
+        },
+        "appServiceIntegrationSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.1.0/24",
+            "metadata": {
+                "description": "IP Prefix for App Service Integration SubnetT"
+            }
+        },
+        "appServicePrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "appServicePrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "sqlServerPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "sqlServerPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "keyVaultPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "keyVaultPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountScriptedPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "autoAccountScriptedPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "lawInsightsPrivateLinkScopeName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "lawInsightsPrivateEndpointName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "lawInsightsPrivateEndpointNicName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
         "keyVaultPrefix": {
             "type": "string",
             "defaultValue": "nerdio",
             "metadata": {
-                "description": "Key Vault Name"
+                "description": "Key Vault Name Prefix"
             }
         },
         "appServicePlanName": {
@@ -188,14 +339,37 @@
         "automationAccountName": "[if(equals(parameters('automationAccountName'),''),concat(parameters('customerName'),'-aa-nerdio-prod-', resourceGroup().location, '-000'), parameters('automationAccountName'))]",
         "contributorRoleId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
         "logLawName": "[if(equals(parameters('logLawName'),''),concat(parameters('customerName'),'-log-nerdio-prod-', resourceGroup().location, '-000'), parameters('logLawName'))]",
-        "logLawID": "[if(equals(parameters('logLawNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName')),resourceId(parameters('logLawResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawName')))]",
         "logLawInsightsName": "[if(equals(parameters('logLawInsightsName'),''),concat(parameters('customerName'),'-log-nerdio-insights-prod-', resourceGroup().location, '-000'), parameters('logLawInsightsName'))]",
-        "logsLawInsightsID": "[if(equals(parameters('logLawInsightsNewOrExisting'), 'new'), resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')),resourceId(parameters('logLawInsightsResourceGroup'), 'Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName')))]",
         "sqlServerLogin": "[concat('L', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'f0a91824-fc25-4cc9-937e-f92791fdab21'))]",
         "sqlServerPassword": "[concat('P', uniqueString(resourceGroup().id, parameters('_securityGuid'), 'e0235df7-82e2-469d-9678-1750453dff32'), 'x', '!')]",
         "sqlServerSuffix": "[environment().suffixes.sqlServerHostname]",
         "microsoftLoginUri": "[environment().authentication.loginEndpoint]",
         "scriptedActionAccountName": "[if(equals(parameters('scriptedActionAccountName'),''),concat(parameters('customerName'),'-aa-scripted-action-nerdio-prod-', resourceGroup().location, '-000'), parameters('scriptedActionAccountName'))]",
+        "appServiceVnetName": "[if(equals(parameters('appServiceVnetName'), ''),concat(parameters('customerName'), '-vnet-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServiceVnetName'))]",
+        "appServicePrivateEndpointSubnetName": "[if(equals(parameters('appServicePrivateEndpointSubnetName'), ''),concat(parameters('customerName'), '-snet-func-nerdio-pe-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointSubnetName'))]",
+        "appServiceIntegrationSubnetName": "[if(equals(parameters('appServiceIntegrationSubnetName'), ''),concat(parameters('customerName'), '-snet-func-nerdio-integration-prod-',resourceGroup().location, '-000'), parameters('appServiceIntegrationSubnetName'))]",
+        "appServicePrivateEndpointName": "[if(equals(parameters('appServicePrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointName'))]",
+        "appServicePrivateEndpointNicName": "[if(equals(parameters('appServicePrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-func-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointName'))]",
+        "sqlServerPrivateEndpointName": "[if(equals(parameters('sqlServerPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-sql-nerdio-prod-',resourceGroup().location, '-000'), parameters('sqlServerPrivateEndpointName'))]",
+        "sqlServerPrivateEndpointNicName": "[if(equals(parameters('sqlServerPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-sql-nerdio-prod-',resourceGroup().location, '-000'), parameters('sqlServerPrivateEndpointNicName'))]",
+        "keyVaultPrivateEndpointName": "[if(equals(parameters('keyVaultPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-kv-nerdio-prod-',resourceGroup().location, '-000'), parameters('keyVaultPrivateEndpointName'))]",
+        "keyVaultPrivateEndpointNicName": "[if(equals(parameters('keyVaultPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-kv-nerdio-prod-',resourceGroup().location, '-000'), parameters('keyVaultPrivateEndpointNicName'))]",
+        "autoAccountPrivateEndpointName": "[if(equals(parameters('autoAccountPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointName'))]",
+        "autoAccountPrivateEndpointNicName": "[if(equals(parameters('autoAccountPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountPrivateEndpointNicName'))]",
+        "scriptedAutoAccountPrivateEndpointName": "[if(equals(parameters('autoAccountScriptedPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-aa-script-nerdio-prod-',resourceGroup().location, '-000'), parameters('autoAccountScriptedPrivateEndpointName'))]",
+        "scriptAutoAccountPrivateEndpointNicName": "[if(equals(parameters('autoAccountScriptedPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-aa-script-nerdio-prod-',resourceGroup().location, '-000'), parameters('appServicePrivateEndpointNicName'))]",
+        "lawInsightsPrivateLinkScopeName": "[if(equals(parameters('lawInsightsPrivateLinkScopeName'), ''),concat(parameters('customerName'), '-pl-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateLinkScopeName'))]",
+        "lawInsightsPrivateEndpointName": "[if(equals(parameters('lawInsightsPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointName'))]",
+        "lawInsightsPrivateEndpointNicName": "[if(equals(parameters('lawInsightsPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointNicName'))]",
+        "dnsZoneSites": "privatelink.azurewebsites.net",
+        "dnsZoneDatabase": "privatelink.database.windows.net",
+        "dnsZoneKeyVault": "privatelink.vaultcore.azure.net",
+        "dnsZoneAa": "privatelink.azure-automation.net",
+        "dnsZoneBlob": "privatelink.blob.core.windows.net",
+        "dnsZoneMonitor": "privatelink.monitor.azure.com",
+        "dnsZoneOdsInsights": "privatelink.ods.opinsights.azure.com",
+        "dnsZoneOmsInsights": "privatelink.oms.opinsights.azure.com",
+        "dnsZoneAgentInsights": "privatelink.agentsvc.azure-automation.net",
         "automation": {
             "runbooks": [
                 {
@@ -255,6 +429,641 @@
             }
         },
         {
+            "condition": "[equals(parameters('appServiceVnetNeworExisting'), 'new')]",
+            "name": "[variables('appServiceVnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('appServiceVnetPrefix')]"
+                    ]
+                },
+                "subnets": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "[parameters('appServicePrivateEndpointSubnetPrefix')]"
+                ],
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-05-01",
+            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "addressPrefixes": [
+                    "[parameters('appServiceIntegrationSubnetPrefix')]"
+                ],
+                "delegations": [
+                    {
+                        "name": "Microsoft.Web.serverFarms",
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName')), '/delegations/Microsoft.Web.serverFarms')]",
+                        "properties": {
+                            "serviceName": "Microsoft.Web/serverFarms"
+                        },
+                        "type": "Microsoft.Network/virtualNetworks/subnets/delegations"
+                    }
+                ],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('appServicePrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('appServicePrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('appServicePrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('appServicePrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                            "groupIds": [
+                                "sites"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('appServicePrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneSites')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('appServicePrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('appServicePrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-azurewebsites-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneSites'), format('{0}-link', variables('dnsZoneSites')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneSites'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('sqlServerPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('sqlServerPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('sqlServerName')), concat('/privateLinkServiceConnections/', variables('sqlServerPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]",
+                            "groupIds": [
+                                "sqlServer"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('sqlServerPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneDatabase')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('sqlServerPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('sqlServerPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-database-windows-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneDatabase'), format('{0}-link', variables('dnsZoneDatabase')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneDatabase'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('keyVaultPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('keyVaultPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('keyVaultName')), concat('/privateLinkServiceConnections/', variables('keyVaultName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+                            "groupIds": [
+                                "vault"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('keyVaultPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneKeyVault')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('keyVaultPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('keyVaultPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneKeyVault'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-vaultcore-azure-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneKeyVault'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneKeyVault'), format('{0}-link', variables('dnsZoneKeyVault')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneKeyVault'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('autoAccountPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('autoAccountPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('autoAccountPrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('autoAccountPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                            "groupIds": [
+                                "DSCAndHybridWorker"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('autoAccountPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneAa')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('autoAccountPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('autoAccountPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-vaultcore-azure-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneAa'), format('{0}-link', variables('dnsZoneAa')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('scriptedAutoAccountPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('scriptedAutoAccountPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('scriptedAutoAccountPrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('scriptedAutoAccountPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]",
+                            "groupIds": [
+                                "DSCAndHybridWorker"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('scriptAutoAccountPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('scriptedAutoAccountPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('scriptedAutoAccountPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-vaultcore-azure-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAa'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/privatelinkscopes",
+            "apiVersion": "2021-07-01-preview",
+            "name": "[variables('lawInsightsPrivateLinkScopeName')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
+            ],
+            "properties": {
+                "accessModeSettings": {
+                    "exclusions": [],
+                    "queryAccessMode": "Open",
+                    "ingestionAccessMode": "Open"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('lawInsightsPrivateEndpointName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
+            ],
+            "properties": {
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[variables('lawInsightsPrivateEndpointName')]",
+                        "id": "[concat(resourceId('Microsoft.Network/privateEndpoints', variables('lawInsightsPrivateEndpointName')), concat('/privateLinkServiceConnections/', variables('lawInsightsPrivateEndpointName')))]",
+                        "properties": {
+                            "privateLinkServiceId": "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
+                            "groupIds": [
+                                "azuremonitor"
+                            ]
+                        }
+                    }
+                ],
+                "customNetworkInterfaceName": "[variables('lawInsightsPrivateEndpointNicName')]",
+                "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "microsoft.insights/privatelinkscopes/scopedresources",
+            "apiVersion": "2021-07-01-preview",
+            "name": "[concat(variables('lawInsightsPrivateLinkScopeName'), '/scoped-', variables('logLawInsightsName'))]",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/privatelinkscopes', variables('lawInsightsPrivateLinkScopeName'))]",
+                "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
+            ],
+            "properties": {
+                "linkedResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawInsightsName'))]"
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneBlob')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneMonitor')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneOdsInsights')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneOmsInsights')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones",
+            "apiVersion": "2018-09-01",
+            "name": "[variables('dnsZoneAgentInsights')]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+            "apiVersion": "2023-05-01",
+            "name": "[concat(variables('lawInsightsPrivateEndpointName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('lawInsightsPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneBlob'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneMonitor'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOdsInsights'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]",
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
+            ],
+            "properties": {
+                "privateDnsZoneConfigs": [
+                    {
+                        "name": "privatelink-blob-core-windows-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneBlob'))]"
+                        }
+                    },
+                    {
+                        "name": "privatelink-monitor-azure-com",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneMonitor'))]"
+                        }
+                    },
+                    {
+                        "name": "privatelink-ods-opinsights-azure-com",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOdsInsights'))]"
+                        }
+                    },
+                    {
+                        "name": "privatelink-agentsvc-azure-automation-net",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]"
+                        }
+                    },
+                    {
+                        "name": "privatelink-oms-opinsights-azure-com",
+                        "properties": {
+                            "privateDnsZoneId": "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneBlob'), format('{0}-link', variables('dnsZoneBlob')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneBlob'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneMonitor'), format('{0}-link', variables('dnsZoneMonitor')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneMonitor'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneOdsInsights'), format('{0}-link', variables('dnsZoneOdsInsights')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOdsInsights'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneOmsInsights'), format('{0}-link', variables('dnsZoneOmsInsights')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneOmsInsights'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+            "apiVersion": "2018-09-01",
+            "name": "[format('{0}/{1}', variables('dnsZoneAgentInsights'), format('{0}-link', variables('dnsZoneAgentInsights')))]",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/privateDnsZones', variables('dnsZoneAgentInsights'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+            ],
+            "properties": {
+                "registrationEnabled": false,
+                "virtualNetwork": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
+                }
+            }
+        },
+        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
@@ -288,6 +1097,7 @@
             "properties": {
                 "administratorLogin": "[variables('sqlServerLogin')]",
                 "administratorLoginPassword": "[variables('sqlServerPassword')]",
+                "publicNetworkAccess": "Disabled",
                 "version": "12.0",
                 "minimalTlsVersion": "1.2"
             },
@@ -310,19 +1120,6 @@
                     "sku": {
                         "name": "[parameters('databaseSkuName')]",
                         "tier": "[parameters('databaseTier')]"
-                    }
-                },
-                {
-                    "type": "firewallrules",
-                    "apiVersion": "2021-11-01",
-                    "dependsOn": [
-                        "[variables('sqlserverName')]"
-                    ],
-                    "location": "[parameters('location')]",
-                    "name": "AllowAllWindowsAzureIps",
-                    "properties": {
-                        "endIpAddress": "0.0.0.0",
-                        "startIpAddress": "0.0.0.0"
                     }
                 }
             ]
@@ -353,6 +1150,7 @@
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
                 "httpsOnly": true,
+                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
                 "siteConfig": {
                     "AlwaysOn": true,
                     "http20Enabled": true,
@@ -434,6 +1232,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
                 "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
             ],
             "resources": [
@@ -478,7 +1277,8 @@
                 ],
                 "enabledForDeployment": false,
                 "enableSoftDelete": true,
-                "softDeleteRetentionInDays": 90
+                "softDeleteRetentionInDays": 90,
+                "publicNetworkAccess": "Disabled"
             },
             "resources": [
                 {
@@ -497,7 +1297,8 @@
                 }
             ],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
             ]
         },
         {
@@ -506,6 +1307,7 @@
             "name": "[variables('scriptedActionAccountName')]",
             "location": "[parameters('location')]",
             "properties": {
+                "publicNetworkAccess": false,
                 "sku": {
                     "name": "Basic"
                 }
@@ -520,6 +1322,7 @@
                 "type": "SystemAssigned"
             },
             "properties": {
+                "publicNetworkAccess": false,
                 "sku": {
                     "name": "Basic"
                 }
@@ -573,7 +1376,8 @@
             "scope": "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
-                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
             ],
             "properties": {
                 "roleDefinitionId": "[variables('contributorRoleId')]",
