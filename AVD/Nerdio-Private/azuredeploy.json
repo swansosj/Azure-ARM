@@ -449,6 +449,7 @@
         "dnsZoneOdsInsights": "privatelink.ods.opinsights.azure.com",
         "dnsZoneOmsInsights": "privatelink.oms.opinsights.azure.com",
         "dnsZoneAgentInsights": "privatelink.agentsvc.azure-automation.net",
+        "hybridWorkerGroupName": "[concat(parameters('customerName'), '-hwg-aa-prod', resourceGroup().location, '-000')]",
         "automation": {
             "runbooks": [
                 {
@@ -1318,6 +1319,39 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerAppAaVmName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('automationAccountName'), variables('hybridWorkerGroupName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/Microsoft.AutomationHybridWorkerExtensionWindows-arm-1.0.0/MainTemplate.json"
+                },
+                "parameters": {
+                    "automationAccountName": {
+                        "value": "[variables('automationAccountName')]"
+                    },
+                    "automationAccountRegion": {
+                        "value": "[parameters('location')]"
+                    },
+                    "hybridWorkerGroupName": {
+                        "value": "[variables('hybridWorkerGroupName')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('hybridWorkerAppAaVmName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
@@ -1622,6 +1656,17 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups",
+            "apiVersion": "2022-08-08",
+            "name": "[format('{0}/{1}', variables('automationAccountName'), variables('hybridWorkerGroupName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "credential": {}
+            }
         },
         {
             "type": "Microsoft.Authorization/roleAssignments",
