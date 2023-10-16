@@ -221,6 +221,13 @@
                 "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
             }
         },
+        "hybridWorkerScriptAaVmName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
         "hybridWorkerAppAaVmZone": {
             "type": "string",
             "defaultValue": "1",
@@ -438,6 +445,7 @@
         "hybridWorkerAppAaNicName": "[if(equals(parameters('hybridWorkerAppAaNicName'), ''),concat(parameters('customerName'), '-nic-vm-hw-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppAaNicName'))]",
         "hybridWorkerAppAaVmName": "[if(equals(parameters('hybridWorkerAppAaVmName'), ''),concat(parameters('customerName'), '-vm-hw-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppAaVmName'))]",
         "hybridWorkerAppScriptedAaNicName": "[if(equals(parameters('hybridWorkerAppScriptedAaNicName'), ''),concat(parameters('customerName'), '-nic-vm-hw-aa-scripted-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppScriptedAaNicName'))]",
+        "hybridWorkerScriptAaVmName": "[if(equals(parameters('hybridWorkerScriptAaVmName'), ''),concat(parameters('customerName'), '-vm-hw-aa-script-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerScriptAaVmName'))]",
         "natGtwyPipName": "[if(equals(parameters('natGtwyPipName'), ''),concat(parameters('customerName'), '-pip-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyPipName'))]",
         "natGtwyName": "[if(equals(parameters('natGtwyName'), ''),concat(parameters('customerName'), '-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyName'))]",
         "dnsZoneSites": "privatelink.azurewebsites.net",
@@ -450,6 +458,7 @@
         "dnsZoneOmsInsights": "privatelink.oms.opinsights.azure.com",
         "dnsZoneAgentInsights": "privatelink.agentsvc.azure-automation.net",
         "hybridWorkerGroupName": "[concat(parameters('customerName'), '-hwg-aa-prod', resourceGroup().location, '-000')]",
+        "scriptHybridWorkerGroupName": "[concat(parameters('customerName'), '-hwg-aa-script-prod', resourceGroup().location, '-000')]",
         "hybridWorkerCredenial": "local",
         "automation": {
             "runbooks": [
@@ -1324,6 +1333,77 @@
             }
         },
         {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[variables('hybridWorkerScriptAaVmName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('hybridWorkerAppScriptedAaNicName'))]"
+            ],
+            "zones": [
+                "[parameters('hybridWorkerAppAaVmZone')]"
+            ],
+            "identity": {
+                "type": "systemAssigned"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "deleteOption": "Delete"
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsDesktop",
+                        "offer": "Windows-10",
+                        "sku": "rs5-enterprise-g2",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('hybridWorkerAppScriptedAaNicName'))]",
+                            "properties": {
+                                "deleteOption": "Delete"
+                            }
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "hwaascriptvm00",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true,
+                        "patchSettings": {
+                            "enableHotpatching": false,
+                            "patchMode": "AutomaticByOS"
+                        }
+                    }
+                },
+                "licenseType": "Windows_Client",
+                "securityProfile": {
+                    "securityType": "TrustedLaunch",
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    }
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
+            }
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
             "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
@@ -1349,6 +1429,38 @@
                     },
                     "vmName": {
                         "value": "[variables('hybridWorkerAppAaVmName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerScriptAaVmName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('scriptedActionAccountName'), variables('scriptHybridWorkerGroupName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/Microsoft.AutomationHybridWorkerExtensionWindows-arm-1.0.0/MainTemplate.json"
+                },
+                "parameters": {
+                    "automationAccountName": {
+                        "value": "[variables('scriptedActionAccountName')]"
+                    },
+                    "automationAccountRegion": {
+                        "value": "[parameters('location')]"
+                    },
+                    "hybridWorkerGroupName": {
+                        "value": "[variables('scriptHybridWorkerGroupName')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('hybridWorkerScriptAaVmName')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
@@ -1675,12 +1787,38 @@
             }
         },
         {
+            "type": "Microsoft.Automation/automationAccounts/credentials",
+            "apiVersion": "2022-08-08",
+            "name": "[format('{0}/{1}', variables('scriptedActionAccountName'), variables('hybridWorkerCredenial'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]"
+            ],
+            "properties": {
+                "userName": "[parameters('adminUsername')]",
+                "password": "[parameters('adminPassword')]"
+            }
+        },
+        {
             "type": "Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups",
             "apiVersion": "2022-08-08",
             "name": "[format('{0}/{1}', variables('automationAccountName'), variables('hybridWorkerGroupName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
                 "[resourceId('Microsoft.Automation/automationAccounts/credentials', variables('automationAccountName'), variables('hybridWorkerCredenial'))]"
+            ],
+            "properties": {
+                "credential": {
+                    "name": "[variables('hybridWorkerCredenial')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups",
+            "apiVersion": "2022-08-08",
+            "name": "[format('{0}/{1}', variables('scriptedActionAccountName'), variables('scriptHybridWorkerGroupName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/credentials', variables('scriptedActionAccountName'), variables('hybridWorkerCredenial'))]"
             ],
             "properties": {
                 "credential": {
