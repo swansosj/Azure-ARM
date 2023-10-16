@@ -1407,8 +1407,8 @@
             "apiVersion": "2022-09-01",
             "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerAppAaVmName'))]",
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('autoAccountPrivateEndpointName'))]",
                 "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('automationAccountName'), variables('hybridWorkerGroupName'))]"
             ],
             "properties": {
