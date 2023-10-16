@@ -1325,7 +1325,7 @@
         },
         {
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "2022-09-01",
             "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
