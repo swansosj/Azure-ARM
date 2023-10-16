@@ -1290,7 +1290,7 @@
                     ]
                 },
                 "osProfile": {
-                    "computerName": "hw-aa-vm-000",
+                    "computerName": "hwaavm00",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
