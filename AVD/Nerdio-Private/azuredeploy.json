@@ -1638,18 +1638,22 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
-                "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]",
-                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
+                "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
+            ],
+            "resources": [
+                {
+                    "name": "MSDeploy",
+                    "type": "extensions",
+                    "location": "[parameters('location')]",
+                    "apiVersion": "2022-03-01",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+                    ],
+                    "properties": {
+                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
+                    }
+                }
             ]
-        },
-        {
-            "type": "Microsoft.Web/sites/extensions",
-            "apiVersion": "2022-03-01",
-            "name": "[format('{0}/{1}', variables('webAppPortalName'), 'MSDeploy')]",
-            "location": "[parameters('location')]",
-            "properties": {
-                "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
-            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
