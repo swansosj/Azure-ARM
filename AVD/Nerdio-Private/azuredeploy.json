@@ -450,6 +450,7 @@
         "dnsZoneOmsInsights": "privatelink.oms.opinsights.azure.com",
         "dnsZoneAgentInsights": "privatelink.agentsvc.azure-automation.net",
         "hybridWorkerGroupName": "[concat(parameters('customerName'), '-hwg-aa-prod', resourceGroup().location, '-000')]",
+        "hybridWorkerCredenial": "local",
         "automation": {
             "runbooks": [
                 {
@@ -1630,7 +1631,7 @@
         {
             "type": "Microsoft.Automation/automationAccounts/credentials",
             "apiVersion": "2022-08-08",
-            "name": "[concat(variables('automationAccountName'), '/local')]",
+            "name": "[format('{0}/{1}', variables('automationAccountName'), variables('hybridWorkerCredenial'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
             ],
@@ -1644,11 +1645,12 @@
             "apiVersion": "2022-08-08",
             "name": "[format('{0}/{1}', variables('automationAccountName'), variables('hybridWorkerGroupName'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/credentials', variables('automationAccountName'), variables('hybridWorkerCredenial'))]"
             ],
             "properties": {
                 "credential": {
-                    "name": "local"
+                    "name": "[variables('hybridWorkerCredenial')]"
                 }
             }
         },
