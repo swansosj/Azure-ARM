@@ -721,8 +721,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
-                "[resourceId('Microsoft.Network/privateEndpoints', variables('appServicePrivateEndpointName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
             ],
             "properties": {
                 "privateLinkServiceConnections": [
