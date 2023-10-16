@@ -1665,7 +1665,9 @@
                 "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
             ],
             "properties": {
-                "credential": {}
+                "credential": {
+                    "name": "Default"
+                }
             }
         },
         {
