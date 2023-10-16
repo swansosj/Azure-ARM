@@ -1406,7 +1406,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
-            "name": "Microsoft.AutomationHybridWorkerExtensionWindows-0",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerAppAaVmName'))]",
@@ -1429,38 +1429,6 @@
                     },
                     "vmName": {
                         "value": "[variables('hybridWorkerAppAaVmName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2022-09-01",
-            "name": "Microsoft.AutomationHybridWorkerExtensionWindows-1",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerScriptAaVmName'))]",
-                "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('scriptedActionAccountName'), variables('scriptHybridWorkerGroupName'))]"
-            ],
-            "properties": {
-                "mode": "incremental",
-                "templateLink": {
-                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/Microsoft.AutomationHybridWorkerExtensionWindows-arm-1.0.0/MainTemplate.json"
-                },
-                "parameters": {
-                    "automationAccountName": {
-                        "value": "[variables('scriptedActionAccountName')]"
-                    },
-                    "automationAccountRegion": {
-                        "value": "[parameters('location')]"
-                    },
-                    "hybridWorkerGroupName": {
-                        "value": "[variables('scriptHybridWorkerGroupName')]"
-                    },
-                    "vmName": {
-                        "value": "[variables('hybridWorkerScriptAaVmName')]"
                     },
                     "location": {
                         "value": "[parameters('location')]"
