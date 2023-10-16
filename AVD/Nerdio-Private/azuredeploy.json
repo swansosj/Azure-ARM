@@ -1638,7 +1638,8 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
-                "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
+                "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
             ],
             "resources": [
                 {
