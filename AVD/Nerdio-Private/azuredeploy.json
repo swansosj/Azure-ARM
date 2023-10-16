@@ -1628,6 +1628,18 @@
             ]
         },
         {
+            "type": "Microsoft.Automation/automationAccounts/credentials",
+            "apiVersion": "2022-08-08",
+            "name": "[concat(variables('automationAccountName'), '/local')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+            ],
+            "properties": {
+                "userName": "[parameters('adminUsername')]",
+                "password": "[parameters('adminPassword')]"
+            }
+        },
+        {
             "type": "Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups",
             "apiVersion": "2022-08-08",
             "name": "[format('{0}/{1}', variables('automationAccountName'), variables('hybridWorkerGroupName'))]",
@@ -1636,7 +1648,7 @@
             ],
             "properties": {
                 "credential": {
-                    "name": ""
+                    "name": "local"
                 }
             }
         },
