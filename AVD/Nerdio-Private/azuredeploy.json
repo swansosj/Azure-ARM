@@ -547,7 +547,7 @@
             ],
             "properties": {
                 "addressPrefixes": [
-                    "[parameters('appServicePrivateEndpointSubnetPrefix')]"
+                    "[parameters('hybridWorkerSubnetPrefix')]"
                 ],
                 "delegations": [],
                 "privateEndpointNetworkPolicies": "Disabled",
