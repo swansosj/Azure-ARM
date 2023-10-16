@@ -1406,7 +1406,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
-            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows-0",
             "dependsOn": [
                 "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerAppAaVmName'))]",
@@ -1439,7 +1439,7 @@
         {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
-            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows-1",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerScriptAaVmName'))]",
                 "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('scriptedActionAccountName'), variables('scriptHybridWorkerGroupName'))]"
