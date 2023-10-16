@@ -1645,7 +1645,7 @@
         {
             "type": "Microsoft.Web/sites/extensions",
             "apiVersion": "2022-03-01",
-            "name": "MSDeploy",
+            "name": "[format('{0}/{1}', variables('webAppPortalName'), 'MSDeploy')]",
             "location": "[parameters('location')]",
             "properties": {
                 "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
