@@ -1640,18 +1640,16 @@
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
                 "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]",
                 "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'), 'MSDeploy')]"
-            ],
-            "resources": [
-                {
-                    "name": "MSDeploy",
-                    "type": "extensions",
-                    "location": "[parameters('location')]",
-                    "apiVersion": "2022-03-01",
-                    "properties": {
-                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
-                    }
-                }
             ]
+        },
+        {
+            "type": "Microsoft.Web/sites/extensions",
+            "apiVersion": "2022-03-01",
+            "name": "MSDeploy",
+            "location": "[parameters('location')]",
+            "properties": {
+                "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
+            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
