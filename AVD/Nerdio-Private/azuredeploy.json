@@ -1290,7 +1290,7 @@
                     ]
                 },
                 "osProfile": {
-                    "computerName": "[variables('hybridWorkerAppAaVmName')]",
+                    "computerName": "hw-aa-vm-000",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]",
                     "windowsConfiguration": {
