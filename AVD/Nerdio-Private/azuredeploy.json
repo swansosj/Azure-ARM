@@ -1666,7 +1666,7 @@
             ],
             "properties": {
                 "credential": {
-                    "name": "Default"
+                    "name": "default"
                 }
             }
         },
