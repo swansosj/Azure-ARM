@@ -1618,7 +1618,7 @@
                         "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
                     ],
                     "properties": {
-                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip', parameters('_artifactsLocationSasToken')))]"
+                        "packageUri": "[uri(parameters('_artifactsLocation'), concat('web-app/app.zip'))]"
                     }
                 }
             ]
