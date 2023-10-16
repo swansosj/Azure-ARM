@@ -541,7 +541,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2023-05-01",
-            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+            "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('hybridWorkerSubnetName'))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks', variables('appServiceVnetName'))]"
             ],
