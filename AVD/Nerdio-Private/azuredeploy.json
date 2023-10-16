@@ -1323,6 +1323,39 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "Microsoft.AutomationHybridWorkerExtensionWindows",
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('hybridWorkerAppAaVmName'))]",
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerAppAaVmName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('automationAccountName'), variables('hybridWorkerGroupName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/Microsoft.AutomationHybridWorkerExtensionWindows-arm-1.0.0/MainTemplate.json"
+                },
+                "parameters": {
+                    "automationAccountName": {
+                        "value": "[variables('automationAccountName')]"
+                    },
+                    "automationAccountRegion": {
+                        "value": "[parameters('location')]"
+                    },
+                    "hybridWorkerGroupName": {
+                        "value": "[variables('hybridWorkerGroupName')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('hybridWorkerAppAaVmName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
