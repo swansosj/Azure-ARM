@@ -174,6 +174,20 @@
                 "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
             }
         },
+        "natGtwyPipName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint inbound connectivity to the App Service"
+            }
+        },
+        "natGtwyName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
         "keyVaultPrefix": {
             "type": "string",
             "defaultValue": "nerdio",
@@ -361,6 +375,8 @@
         "lawInsightsPrivateLinkScopeName": "[if(equals(parameters('lawInsightsPrivateLinkScopeName'), ''),concat(parameters('customerName'), '-pl-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateLinkScopeName'))]",
         "lawInsightsPrivateEndpointName": "[if(equals(parameters('lawInsightsPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointName'))]",
         "lawInsightsPrivateEndpointNicName": "[if(equals(parameters('lawInsightsPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointNicName'))]",
+        "natGtwyPipName": "[if(equals(parameters('natGtwyPipName'), ''),concat(parameters('customerName'), '-pip-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyPipName'))]",
+        "natGtwyName": "[if(equals(parameters('natGtwyName'), ''),concat(parameters('customerName'), '-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyName'))]",
         "dnsZoneSites": "privatelink.azurewebsites.net",
         "dnsZoneDatabase": "privatelink.database.windows.net",
         "dnsZoneKeyVault": "privatelink.vaultcore.azure.net",
@@ -464,12 +480,16 @@
             "apiVersion": "2023-05-01",
             "name": "[format('{0}/{1}', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]"
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServicePrivateEndpointSubnetName'))]",
+                "[resourceId('Microsoft.Network/natGateways', variables('natGtwyName'))]"
             ],
             "properties": {
                 "addressPrefixes": [
                     "[parameters('appServiceIntegrationSubnetPrefix')]"
                 ],
+                "natGateway": {
+                    "id": "[resourceId('Microsoft.Network/natGateways', variables('natGtwyName'))]"
+                },
                 "delegations": [
                     {
                         "name": "Microsoft.Web.serverFarms",
@@ -482,6 +502,46 @@
                 ],
                 "privateEndpointNetworkPolicies": "Disabled",
                 "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/natGateways",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('natGtwyName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('natGtwyPipName'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "idleTimeoutInMinutes": 4,
+                "publicIpAddresses": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('natGtwyPipName'))]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-05-01",
+            "name": "[variables('natGtwyPipName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": [],
+                "ddosSettings": {
+                    "protectionMode": "VirtualNetworkInherited"
+                }
             }
         },
         {
