@@ -1436,6 +1436,39 @@
             }
         },
         {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "name": "HybridWorker1",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('hybridWorkerScriptAaVmName'))]",
+                "[resourceId('Microsoft.Network/privateEndpoints', variables('scriptedAutoAccountPrivateEndpointName'))]",
+                "[resourceId('Microsoft.Automation/automationAccounts/hybridRunbookWorkerGroups', variables('scriptedActionAccountName'), variables('scriptHybridWorkerGroupName'))]"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "https://catalogartifact.azureedge.net/publicartifacts/Microsoft.AutomationHybridWorkerExtensionWindows-arm-1.0.0/MainTemplate.json"
+                },
+                "parameters": {
+                    "automationAccountName": {
+                        "value": "[variables('scriptedActionAccountName')]"
+                    },
+                    "automationAccountRegion": {
+                        "value": "[parameters('location')]"
+                    },
+                    "hybridWorkerGroupName": {
+                        "value": "[variables('scriptHybridWorkerGroupName')]"
+                    },
+                    "vmName": {
+                        "value": "[variables('hybridWorkerScriptAaVmName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
             "apiVersion": "2022-10-01",
             "type": "Microsoft.OperationalInsights/workspaces",
             "name": "[variables('logLawInsightsName')]",
