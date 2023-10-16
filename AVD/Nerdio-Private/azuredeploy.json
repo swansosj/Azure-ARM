@@ -16,6 +16,18 @@
                 "description": "Name of the Customer"
             }
         },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Username of the VM"
+            }
+        },
+        "adminPassword": {
+            "type": "SecureString",
+            "metadata": {
+                "description": "Username of the VM"
+            }
+        },
         "appName": {
             "type": "string",
             "defaultValue": "",
@@ -198,6 +210,25 @@
         "hybridWorkerAppScriptedAaNicName": {
             "type": "string",
             "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "hybridWorkerAppAaVmName": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
+            }
+        },
+        "hybridWorkerAppAaVmZone": {
+            "type": "string",
+            "defaultValue": "1",
+            "allowedValues": [
+                "1",
+                "2",
+                "3"
+            ],
             "metadata": {
                 "description": "Name of the Private Endpoint Network Interface inbound connectivity to the App Service"
             }
@@ -405,6 +436,7 @@
         "lawInsightsPrivateEndpointName": "[if(equals(parameters('lawInsightsPrivateEndpointName'), ''),concat(parameters('customerName'), '-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointName'))]",
         "lawInsightsPrivateEndpointNicName": "[if(equals(parameters('lawInsightsPrivateEndpointNicName'), ''),concat(parameters('customerName'), '-nic-pe-log-insights-nerdio-prod-',resourceGroup().location, '-000'), parameters('lawInsightsPrivateEndpointNicName'))]",
         "hybridWorkerAppAaNicName": "[if(equals(parameters('hybridWorkerAppAaNicName'), ''),concat(parameters('customerName'), '-nic-vm-hw-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppAaNicName'))]",
+        "hybridWorkerAppAaVmName": "[if(equals(parameters('hybridWorkerAppAaVmName'), ''),concat(parameters('customerName'), '-vm-hw-aa-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppAaVmName'))]",
         "hybridWorkerAppScriptedAaNicName": "[if(equals(parameters('hybridWorkerAppScriptedAaNicName'), ''),concat(parameters('customerName'), '-nic-vm-hw-aa-scripted-nerdio-prod-',resourceGroup().location, '-000'), parameters('hybridWorkerAppScriptedAaNicName'))]",
         "natGtwyPipName": "[if(equals(parameters('natGtwyPipName'), ''),concat(parameters('customerName'), '-pip-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyPipName'))]",
         "natGtwyName": "[if(equals(parameters('natGtwyName'), ''),concat(parameters('customerName'), '-ng-nerdio-prod-',resourceGroup().location, '-000'), parameters('natGtwyName'))]",
@@ -1228,6 +1260,77 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2022-03-01",
+            "name": "[variables('hybridWorkerAppAaVmName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('hybridWorkerAppAaNicName'))]"
+            ],
+            "zones": [
+                "[parameters('hybridWorkerAppAaVmZone')]"
+            ],
+            "identity": {
+                "type": "systemAssigned"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2s_v3"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "deleteOption": "Delete"
+                    },
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsDesktop",
+                        "offer": "Windows-10",
+                        "sku": "rs5-enterprise-g2",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('hybridWorkerAppAaNicName'))]",
+                            "properties": {
+                                "deleteOption": "Delete"
+                            }
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[variables('hybridWorkerAppAaVmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]",
+                    "windowsConfiguration": {
+                        "enableAutomaticUpdates": true,
+                        "provisionVmAgent": true,
+                        "patchSettings": {
+                            "enableHotpatching": false,
+                            "patchMode": "AutomaticByOS"
+                        }
+                    }
+                },
+                "licenseType": "Windows_Client",
+                "securityProfile": {
+                    "securityType": "TrustedLaunch",
+                    "uefiSettings": {
+                        "secureBootEnabled": true,
+                        "vTpmEnabled": true
+                    }
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true
+                    }
+                }
             }
         },
         {
