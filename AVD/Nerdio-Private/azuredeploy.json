@@ -1555,85 +1555,7 @@
             "properties": {
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
                 "httpsOnly": true,
-                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]",
-                "siteConfig": {
-                    "AlwaysOn": true,
-                    "http20Enabled": true,
-                    "use32BitWorkerProcess": false,
-                    "ftpsState": "Disabled",
-                    "minTlsVersion": "1.2",
-                    "netFrameworkVersion": "v6.0",
-                    "appSettings": [
-                        {
-                            "name": "AzureAd:Instance",
-                            "value": "[variables('microsoftLoginUri')]"
-                        },
-                        {
-                            "name": "Deployment:AzureType",
-                            "value": "[environment().name]"
-                        },
-                        {
-                            "name": "Deployment:Region",
-                            "value": "[parameters('location')]"
-                        },
-                        {
-                            "name": "Deployment:KeyVaultName",
-                            "value": "[variables('keyVaultName')]"
-                        },
-                        {
-                            "name": "Deployment:SubscriptionId",
-                            "value": "[subscription().subscriptionId]"
-                        },
-                        {
-                            "name": "Deployment:SubscriptionDisplayName",
-                            "value": "[subscription().displayName]"
-                        },
-                        {
-                            "name": "Deployment:TenantId",
-                            "value": "[subscription().tenantId]"
-                        },
-                        {
-                            "name": "Deployment:ResourceGroupName",
-                            "value": "[resourceGroup().name]"
-                        },
-                        {
-                            "name": "Deployment:WebAppName",
-                            "value": "[variables('webAppPortalName')]"
-                        },
-                        {
-                            "name": "Deployment:AutomationAccountName",
-                            "value": "[variables('automationAccountName')]"
-                        },
-                        {
-                            "name": "Deployment:AutomationEnabled",
-                            "value": "True"
-                        },
-                        {
-                            "name": "Deployment:AzureTagPrefix",
-                            "value": "[parameters('azureTagPrefix')]"
-                        },
-                        {
-                            "name": "Deployment:UpdaterRunbookRunAs",
-                            "value": "nmwUpdateRunAs"
-                        },
-                        {
-                            "name": "Deployment:LogAnalyticsWorkspace",
-                            "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
-                        },
-                        {
-                            "name": "Deployment:ScriptedActionAccount",
-                            "value": "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]"
-                        },
-                        {
-                            "name": "ApplicationInsights:InstrumentationKey",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).InstrumentationKey]"
-                        },
-                        {
-                            "name": "ApplicationInsights:ConnectionString",
-                            "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).ConnectionString]"
-                        }
-                    ]
-                }
+                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('appServiceVnetName'), variables('appServiceIntegrationSubnetName'))]"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
@@ -1654,6 +1576,94 @@
                     }
                 }
             ]
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-09-01",
+            "name": "[concat(variables('webAppPortalName'), '/web')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Web/sites/extensions', variables('webAppPortalName'),'MSDeploy')]"
+            ],
+            "properties": {
+                "alwaysOn": true,
+                "http20Enabled": true,
+                "use32BitWorkerProcess": false,
+                "ftpsState": "Disabled",
+                "minTlsVersion": "1.2",
+                "netFrameworkVersion": "v6.0",
+                "appSettings": [
+                    {
+                        "name": "AzureAd:Instance",
+                        "value": "[variables('microsoftLoginUri')]"
+                    },
+                    {
+                        "name": "Deployment:AzureType",
+                        "value": "[environment().name]"
+                    },
+                    {
+                        "name": "Deployment:Region",
+                        "value": "[parameters('location')]"
+                    },
+                    {
+                        "name": "Deployment:KeyVaultName",
+                        "value": "[variables('keyVaultName')]"
+                    },
+                    {
+                        "name": "Deployment:SubscriptionId",
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    {
+                        "name": "Deployment:SubscriptionDisplayName",
+                        "value": "[subscription().displayName]"
+                    },
+                    {
+                        "name": "Deployment:TenantId",
+                        "value": "[subscription().tenantId]"
+                    },
+                    {
+                        "name": "Deployment:ResourceGroupName",
+                        "value": "[resourceGroup().name]"
+                    },
+                    {
+                        "name": "Deployment:WebAppName",
+                        "value": "[variables('webAppPortalName')]"
+                    },
+                    {
+                        "name": "Deployment:AutomationAccountName",
+                        "value": "[variables('automationAccountName')]"
+                    },
+                    {
+                        "name": "Deployment:AutomationEnabled",
+                        "value": "True"
+                    },
+                    {
+                        "name": "Deployment:AzureTagPrefix",
+                        "value": "[parameters('azureTagPrefix')]"
+                    },
+                    {
+                        "name": "Deployment:UpdaterRunbookRunAs",
+                        "value": "nmwUpdateRunAs"
+                    },
+                    {
+                        "name": "Deployment:LogAnalyticsWorkspace",
+                        "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logLawName'))]"
+                    },
+                    {
+                        "name": "Deployment:ScriptedActionAccount",
+                        "value": "[resourceId('Microsoft.Automation/automationAccounts', variables('scriptedActionAccountName'))]"
+                    },
+                    {
+                        "name": "ApplicationInsights:InstrumentationKey",
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).InstrumentationKey]"
+                    },
+                    {
+                        "name": "ApplicationInsights:ConnectionString",
+                        "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName'))).ConnectionString]"
+                    }
+                ]
+            }
         },
         {
             "type": "Microsoft.KeyVault/vaults",
