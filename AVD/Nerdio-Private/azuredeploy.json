@@ -62,7 +62,7 @@
         },
         "appServiceVnetPrefix": {
             "type": "string",
-            "defaultValue": "10.0.0.0/16",
+            "defaultValue": "10.1.0.0/16",
             "metadata": {
                 "description": "IP Prefix for App Service VNET"
             }
@@ -76,7 +76,7 @@
         },
         "appServicePrivateEndpointSubnetPrefix": {
             "type": "string",
-            "defaultValue": "10.0.0.0/24",
+            "defaultValue": "10.1.0.0/24",
             "metadata": {
                 "description": "IP Prefix for App Service Private Endpoint Subnet"
             }
@@ -90,7 +90,7 @@
         },
         "appServiceIntegrationSubnetPrefix": {
             "type": "string",
-            "defaultValue": "10.0.1.0/24",
+            "defaultValue": "10.1.1.0/24",
             "metadata": {
                 "description": "IP Prefix for App Service Integration SubnetT"
             }
@@ -104,7 +104,7 @@
         },
         "hybridWorkerSubnetPrefix": {
             "type": "string",
-            "defaultValue": "10.0.2.0/24",
+            "defaultValue": "10.1.2.0/24",
             "metadata": {
                 "description": "IP Prefix for App Service Integration SubnetT"
             }
@@ -1276,7 +1276,7 @@
             },
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_D2s_v3"
+                    "vmSize": "Standard_D4s_v4"
                 },
                 "storageProfile": {
                     "osDisk": {
@@ -1347,7 +1347,7 @@
             },
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_D2s_v3"
+                    "vmSize": "Standard_D4s_v4"
                 },
                 "storageProfile": {
                     "osDisk": {
